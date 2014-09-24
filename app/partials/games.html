@@ -1,0 +1,5 @@
+<div class="container" ng-controller="GamesCtrl">
+  <div class="row marketing">
+    <game-preview ng-repeat="(key, val) in gameInfo" game="{{ key }}" class="col-md-6" style="margin-top: 20px;"></game-preview>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="top-gutter">
+  <div class="game-info container">
+    <div class="col-sm-8">
+      <h1 class="h1">{{ game.title }}</h1>
+      <p class="game-authors">{{ game.authors }}</p>
+      <h5 class="game-description">
+        {{ game.description }}
+      </h5>
+
+      <a target="_blank" href="{{ game.link }}" ng-show="game.link">Game page</a>
+
+      <hr />
+
+      <blockquote ng-repeat="quote in game.quotes">
+        <p>{{ quote.quote }}</p>
+        <footer><a target="_blank" href="{{ quote.author.link }}">{{ quote.author.name }}</a> {{ quote.author.tag }}</footer>
+      </blockquote>
+
+      <carousel interval="10000">
+        <slide ng-repeat="image in game.captures">
+          <img src="/images/games/{{ image }}" />
+        </slide>
+      </carousel>
+    </div>
+    <div class="game-side col-sm-4 hidden-xs">
+      <div class="game-image">
+        <img src="/images/games/{{ game.image }}" />
+      </div>
+
+      <div class="text-center">
+        <a target="_blank" ng-repeat="item in game.showcase" href="{{ item.link }}">
+          <img src="{{ item.image }}" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
