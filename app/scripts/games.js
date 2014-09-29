@@ -1,4 +1,4 @@
-angular.module('thomassteinke').factory('games', function() {
+angular.module('thomassteinke').factory('games', function($sce) {
   var games = {};
 
   games['kickbox'] = {
@@ -41,7 +41,38 @@ angular.module('thomassteinke').factory('games', function() {
     title: 'Knights With Guns',
     thumb: 'knights.png',
     image: 'knights@2x.png',
-    color: '#8BC065',
+    captures: [
+      'knights-sc1.png',
+      'knights-sc2.png',
+      'knights-sc0.png',
+      'knights-sc3.png'
+    ],
+    link: 'http://jams.gamejolt.io/gbjam3/games/knights-with-guns/31979',
+    quotes: [
+      {
+        quote: 'Neat aesthetic. The random level creation is a cool feature :)',
+        author: {
+          link: 'http://gamejolt.com/profile/fisholith/310484/',
+          name: 'Fisholith',
+          tag: 'on Gamejolt'
+        }
+      }
+    ],
+    showcase: [
+      {
+        link: 'http://jams.gamejolt.io/gbjam3',
+        image: '/images/external/gbjam.png'
+      },
+      {
+        link: 'http://gamejolt.com/games/arcade/knights-with-guns/31979/',
+        image: '/images/games/knights-ratings-2.png'
+      },
+      {
+        link: 'http://jams.gamejolt.io/gbjam3/games/knights-with-guns/31979',
+        image: '/images/games/knights-ratings.png'
+      }
+    ],
+    color: '#33684E',
     authors: 'Thomas Steinke & Elliot Fiske',
     desc: 'You are the last of the Gun Knights, an ancient Order sworn to defend the land against evil.',
     description: 'You are the last of the Gun Knights, an ancient Order sworn to defend the land against evil.<br><br>Fight your way through a randomly generated level and vanquish the despicable Boss at the end to make history in this endlessly replayable fantasy epic.',
@@ -51,11 +82,37 @@ angular.module('thomassteinke').factory('games', function() {
     title: 'Flux',
     thumb: 'flux.png',
     image: 'flux@2x.png',
+    captures: [
+      'flux-sc0.png'
+    ],
+    link: 'http://globalgamejam.org/2014/games/flux',
+    showcase: [
+      {
+        link: 'http://globalgamejam.org/',
+        image: '/images/external/globalgamejam.png'
+      },
+      {
+        link: 'http://globalgamejam.org/2014/jam-sites/cal-poly',
+        text: '<span class="fa fa-star"></span> Second place on campus'
+      },
+      {
+        image: '/images/games/flux-controls.png'
+      }
+    ],
     color: '#01307C',
     authors: 'Thomas Steinke, Elliot Fiske, & Max Linsenbard',
     desc: 'Take advantage of the various forms of light to outsmart physics itself.',
     description: 'In Flux, you control a Particle and a Wave of light working together to reach the end of each level. The Particle and Wave each have unique abilities - the Wave can block lasers that are fatal to the Particle, and the Particle can open doors for the wave by standing on switches. In Flux, you are what you see - light.',
   };
+
+  angular.forEach(games, function(game, name) {
+    game.description = $sce.trustAsHtml(game.description);
+    if(typeof(game.showcase) !== 'undefined') {
+      game.showcase.forEach(function(item) {
+        item.text = $sce.trustAsHtml(item.text);
+      });
+    }
+  });
 
   return games;
 });

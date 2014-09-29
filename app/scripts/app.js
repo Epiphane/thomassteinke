@@ -70,7 +70,7 @@ angular.module('thomassteinke').controller('IndexCtrl', function($window, $state
 	var navbar = angular.element(document.getElementById('navbar'));
 	var updateNavBar = function() {
 		var parallax;
-		var scrollThreshhold = 50;
+		var scrollThreshhold = 0;
 		if(parallax = document.getElementById('parallax-header')) {
 			scrollThreshhold = parallax.offsetHeight;
 		}
@@ -86,4 +86,5 @@ angular.module('thomassteinke').controller('IndexCtrl', function($window, $state
 	updateNavBar();
 
 	window.bind('scroll', updateNavBar);
+	$rootScope.$on('$viewContentLoaded', updateNavBar);
 });

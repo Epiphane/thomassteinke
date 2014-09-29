@@ -2,9 +2,9 @@
   <div class="game-info container">
     <div class="col-sm-8">
       <h1 class="h1">{{ game.title }}</h1>
+      <a class="btn btn-primary bottom-margin" ng-show="game.download" href="{{ game.download }}">Download</a>
       <p class="game-authors">{{ game.authors }}</p>
-      <h5 class="game-description">
-        {{ game.description }}
+      <h5 class="game-description" ng-bind-html="game.description">
       </h5>
 
       <a target="_blank" href="{{ game.link }}" ng-show="game.link">Game page</a>
@@ -29,7 +29,8 @@
 
       <div class="text-center">
         <a target="_blank" ng-repeat="item in game.showcase" href="{{ item.link }}">
-          <img src="{{ item.image }}" />
+          <img src="{{ item.image }}" ng-show="item.image" />
+          <h4 ng-show="item.text" ng-bind-html="item.text"></h4>
         </a>
       </div>
     </div>

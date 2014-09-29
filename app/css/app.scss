@@ -41,6 +41,10 @@ hr {
   padding-top: 50px;
 }
 
+.bottom-margin {
+  margin: 0 0 10px 0;
+}
+
 /** Navigation */
 .navbar {
   min-height: 40px;
@@ -277,14 +281,17 @@ hr {
 
 .game-info {
   background: #eeeeee;
-  padding: 0;
+  padding: 0 0 20px 0;
   overflow: hidden;
-  border-radius: 10px;
   box-shadow: #000 1px 1px 20px;
 
-  img {
-    margin-bottom: 20px;
-    max-width: 100%;
+  .carousel-indicators {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    bottom: 0;
+    margin: 0;
+    width: 100%;
+    left: 0;
   }
 
   .game-side {
@@ -293,8 +300,17 @@ hr {
     border-left: 1px solid #aaa;
     padding: 0;
 
+    img {
+      margin-bottom: 20px;
+      max-width: 100%;
+    }
+
     .game-image img {
       max-height: 400px;
     }
+  }
+
+  @media all and (min-width: 768px) {
+    border-radius: 10px;
   }
 }

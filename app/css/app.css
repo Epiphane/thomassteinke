@@ -7388,6 +7388,9 @@ hr {
   padding-bottom: 50px;
   padding-top: 50px; }
 
+.bottom-margin {
+  margin: 0 0 10px 0; }
+
 /** Navigation */
 .navbar {
   min-height: 40px;
@@ -7550,19 +7553,28 @@ hr {
 
 .game-info {
   background: #eeeeee;
-  padding: 0;
+  padding: 0 0 20px 0;
   overflow: hidden;
-  border-radius: 10px;
   box-shadow: #000 1px 1px 20px; }
-  .game-info img {
-    margin-bottom: 20px;
-    max-width: 100%; }
+  .game-info .carousel-indicators {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    bottom: 0;
+    margin: 0;
+    width: 100%;
+    left: 0; }
   .game-info .game-side {
     float: right;
     padding-right: 0;
     border-left: 1px solid #aaa;
     padding: 0; }
+    .game-info .game-side img {
+      margin-bottom: 20px;
+      max-width: 100%; }
     .game-info .game-side .game-image img {
       max-height: 400px; }
+  @media all and (min-width: 768px) {
+    .game-info {
+      border-radius: 10px; } }
 
 /*# sourceMappingURL=app.css.map */

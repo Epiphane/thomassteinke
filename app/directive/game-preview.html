@@ -1,13 +1,19 @@
 <div class="game-preview">
   <div class="game-image" />
-    <img src="/images/games/{{ game.thumb }}" />
+    <a ui-sref="pages.game({ title: game_nom })">
+      <img src="/images/games/{{ game.thumb }}" />
+    </a>
   </div>
-  <h4 class="h4">{{ game.title }}</h4>
+  <h4 class="h4">
+    <a ui-sref="pages.game({ title: game_nom })">
+      {{ game.title }}
+    </a>
+  </h4>
   <p class="game-description">
     {{ game.desc }}
   </p>
   <p class="game-links">
-    <a ui-sref="pages.game({ title: game_nom })">INFO</a> | 
+    <a ui-sref="pages.game({ title: game_nom })">INFO</a> |
     <a href="{{ game.download }}">DOWNLOAD</a>
   </p>
 </div>
