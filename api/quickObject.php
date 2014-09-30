@@ -31,7 +31,6 @@ class AppObject {
   }
 
   public function show() { ?>
-    <a href=""
     <h1><?= $this->objectName ?></h1>
     <h3>Fields:</h3>
     <ul>
