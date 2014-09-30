@@ -8,7 +8,7 @@ $method = $_SERVER[REQUEST_METHOD];
 
 switch($request[0]) {
   case "quick":
-    quickAndEasy($request, $method);
+    quickAndEasy($connect, $request, $method);
     break;
   default:
     echo "Welcome to my secret hideout!";
