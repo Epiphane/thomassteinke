@@ -1,6 +1,7 @@
 <?php
 
 include("quickApp.php");
+include("quickObject.php");
 
 function quickAndEasy($mysqli, $request, $method) {
   if($method == "POST") {
@@ -32,7 +33,7 @@ function quickAndEasy($mysqli, $request, $method) {
       $request = array_slice($request, 2);
 
       // Pass on request!
-      $app->request($request, $method);
+      $app->request($mysqli, $request, $method);
     }
     else {
       echo("Error: App Hash not found");
