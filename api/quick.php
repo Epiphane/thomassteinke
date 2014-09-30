@@ -7,6 +7,10 @@ function quickAndEasy($mysqli, $request, $method) {
     echo $_POST["method"];
   }
 
+  //header('HTTP/1.0 404 Not Found');
+  //die();
+  //send404AndDie();
+
   // Base stuff
   if(count($request) == 1) {
     switch($method) {

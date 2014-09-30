@@ -14,4 +14,10 @@ switch($request[0]) {
     echo "Welcome to my secret hideout!";
 }
 
+
+function send404AndDie() {
+  header('HTTP/1.0 404 Not Found');
+  die();
+}
+
 ?>
