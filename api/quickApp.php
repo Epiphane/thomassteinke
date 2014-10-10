@@ -22,7 +22,7 @@ class App {
     if(sizeof($request) == 0) {
       switch($method) {
         case "GET":
-          $this->show();
+          $this->index();
           break;
         case "POST":
           echo "New object";
@@ -35,30 +35,41 @@ class App {
     }
     // Pass it on!
     else {
-      // Is it an object?
-      if(array_search($request[0], $this->appObjects) != null) {
-        // Found object! Pass on the request
-        $object = new AppObject($mysqli, $this->appInfo["id"], $request[0]);
-        $request = array_slice($request, 1);
-
-        // Pass on request!
-        $object->request($mysqli, $request, $method);
-      }
-      else {
-        echo("Error: App Object not found");
-      }
+      $this->show($mysqli, $request, $method);
     }
   }
 
-  public function show() { ?>
-    <h1><?= $this->appInfo["name"] ?></h1>
-    <h3>Objects:</h3>
-    <ul>
-      <?php foreach($this->appObjects as $obj) { ?>
-        <li><a href="<?= $_SERVER[REQUEST_URI] ?>/<?= $obj ?>"><?= $obj ?></a></li>
-      <? } ?>
-    </ul>
+  // This is weirdly formatted so that the JSON looks good
+  public function index() { ?>
+    {
+      "name": "<?= $this->appInfo["name"] ?>",
+      "objects": [
+<? $i = 0;
+        foreach($this->appObjects as $obj) {
+          if ($i++ > 0) echo ", \n"; ?>
+        {
+          "name": "<?= $obj ?>",
+          "uri": "<?= $_SERVER[REQUEST_URI] . "/" . $obj ?>"
+        }<? } ?>
+
+      ]
+    }
   <? }
+
+  public function show($mysqli, $request, $method) {
+    // Is it an object?
+    if(array_search($request[0], $this->appObjects) != null) {
+      // Found object! Pass on the request
+      $object = new AppObject($mysqli, $this->appInfo["id"], $request[0]);
+      $request = array_slice($request, 1);
+
+      // Pass on request!
+      $object->request($mysqli, $request, $method);
+    }
+    else {
+      send404AndDie();
+    }
+  }
 }
 
 ?>

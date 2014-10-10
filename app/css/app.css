@@ -7379,7 +7379,8 @@ hr {
   border-top: 1px solid #aaaaaa; }
 
 .marketing {
-  margin: 40px 0; }
+  margin-top: 40px;
+  margin-bottom: 40px; }
 
 .no-gutter {
   padding: 0; }
@@ -7389,7 +7390,7 @@ hr {
   padding-top: 50px; }
 
 .bottom-margin {
-  margin: 0 0 10px 0; }
+  margin-bottom: 10px; }
 
 /** Navigation */
 .navbar {
@@ -7493,7 +7494,7 @@ hr {
 .footer {
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5; }
+  border-top: 1px solid #d5d5d5; }
 
 /** Containers */
 .container.home {
@@ -7576,5 +7577,9 @@ hr {
   @media all and (min-width: 768px) {
     .game-info {
       border-radius: 10px; } }
+
+.about-me img {
+  max-width: 100%;
+  border-radius: 150px; }
 
 /*# sourceMappingURL=app.css.map */

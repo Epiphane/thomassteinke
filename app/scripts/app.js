@@ -52,10 +52,10 @@ angular.module('thomassteinke').config(function($locationProvider, $stateProvide
 		}
 	})
 	.state('pages.landing.contact', {
-		url: '^/contact',
+		url: '^/about',
 		templateUrl: '/partials/contact.html',
 		data: {
-			title: 'Contact Me',
+			title: 'About Me',
 			banner: 'contact'
 		}
 	});
@@ -82,6 +82,8 @@ angular.module('thomassteinke').controller('IndexCtrl', function($window, $state
 			navbar.removeClass('scroll');
 		}
 	};
+
+	$rootScope.navlight = 'light';
 
 	updateNavBar();
 
