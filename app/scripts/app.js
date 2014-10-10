@@ -41,6 +41,9 @@ angular.module('thomassteinke').config(function($locationProvider, $stateProvide
 		data: {
 			title: 'Games',
 			banner: 'games'
+		},
+		controller: function($rootScope) {
+			$rootScope.bgcolor = '#eeeeee';
 		}
 	})
 	.state('pages.landing.resume', {
@@ -49,6 +52,9 @@ angular.module('thomassteinke').config(function($locationProvider, $stateProvide
 		data: {
 			title: 'Resume',
 			banner: 'resume'
+		},
+		controller: function($rootScope) {
+			$rootScope.bgcolor = '#eeeeee';
 		}
 	})
 	.state('pages.landing.contact', {
@@ -57,6 +63,9 @@ angular.module('thomassteinke').config(function($locationProvider, $stateProvide
 		data: {
 			title: 'About Me',
 			banner: 'contact'
+		},
+		controller: function($rootScope) {
+			$rootScope.bgcolor = '#eeeeee';
 		}
 	});
 });

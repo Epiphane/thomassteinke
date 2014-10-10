@@ -64,7 +64,7 @@ angular.module('thomassteinke').directive('parallaxImage', function($rootScope, 
 			// Disable Parallax on iOS
 			if(!(/iPhone|iPad|iPod|Mobile/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
 				var updateParallax = function() {
-	        var translate = 'translate3d(0, ' + $window.pageYOffset * 2 / 3 + 'px, 0)';
+					var translate = 'translate3d(0, ' + $window.pageYOffset * 2 / 3 + 'px, 0)';
 					element.css({
 						'-webkit-transform': translate,
 						'ms-transform': translate,
