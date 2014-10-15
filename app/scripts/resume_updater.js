@@ -35,6 +35,14 @@ angular.module('thomassteinke').factory('resumeUpdater', function($rootScope, $w
 		$window.scrollTo(0,0);
 		window.bind('scroll', updateResumeBG);
 	}
+	else {
+		var updateBG = function() {
+			$rootScope.bgcolor = 'rgb(91, 192, 222)';
+			$rootScope.$apply();
+		};
+		updateBG();
+		window.bind('scroll', updateBG);
+	}
 
 	return {};
 });

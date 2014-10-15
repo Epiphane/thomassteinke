@@ -1,22 +1,72 @@
-<div class="container" ng-controller="ResumeCtrl">
-  <div class="row marketing">
-  	<div class="progress nogutter">
-  		<div class="progress-bar" style="width: 100%; height: 100%">
-		  </div>
-		</div>
-  	<div class="progress vertical min-page-height">
-  		<div class="progress-bar" style="width: 100%; height: 100%">
-		  </div>
-		</div>
-  	<div class="col-xs-12 resume-item right">
-  		<div class="item bottom-gutter">
+<div class="container" ng-controller="ResumeCtrl"> 
+  <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-float">
+    <div class="row marketing">
+    	<div class="progress nogutter">
+    		<div class="progress-bar" style="width: 100%; height: 100%">
+  		  </div>
   		</div>
-  		<div class="item">
+    	<div class="progress vertical min-page-height">
+    		<div class="progress-bar fade-out blue" style="width: 100%; height: 100%">
+  		  </div>
   		</div>
-  	</div>
-  	<div class="progress nogutter no-gutter col-xs-12 topgutter">
-  		<div class="progress-bar" style="width: 100%; height: 100%">
-		  </div>
-		</div>
+    	<div class="col-xs-12 resume-item right top-gutter-sm">
+        <div class="progress vertical min-page-height bottom-right">
+          <div class="progress-bar fade-in blue" style="width: 100%; height: 100%">
+          </div>
+        </div>
+    		<div class="item col-xs-6">
+          <h4>Experience</h4>
+    		</div>
+        <div class="no-gutter-right col-xs-6">
+          <div class="item">
+            <h4>Projects</h4>
+          </div>
+        </div>
+    		<div class="item col-xs-12" ng-repeat="item in experience">
+          <div class="col-sm-10 no-gutter">
+            <h3>{{ item.title }}</h3>
+            <h6>{{ item.position }} | {{ item.time }}</h6>
+            <div class="details">
+              <ul>
+              <li ng-repeat="det in item.details">{{ det }}</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-2 no-gutter pull-right hidden-xs">
+            <img src="/images/resume/{{ item.image }}" />
+          </div>
+    		</div>
+    	</div>
+
+      <div class="progress no-gutter col-xs-12 pull-right">
+        <div class="progress-bar green-to-blue" style="width: 100%; height: 100%">
+        </div>
+      </div>
+
+      <div class="progress vertical min-page-height">
+        <div class="progress-bar fade-out green" style="width: 100%; height: 100%">
+        </div>
+      </div>
+      <div class="col-xs-12 resume-item right">
+        <div class="item col-xs-12">
+          <h4 class="col-sm-4 col-xs-12">Languages</h4>
+          <div class="col-sm-8 col-xs-12 pull-right topgutter"`>
+            <span class="lift">Proficient</span>
+            <div class="progress no-gutter nogutter">
+              <div class="progress-bar purple-to-green" style="width: 100%; height: 100%">
+              </div>
+            </div>
+            <span class="col-xs-6 pull-right text-right">Master</span>
+          </div>
+        </div>
+        <div class="languages">
+          <div class="col-sm-4" ng-repeat="language in languages">
+            <div class="item col-xs-12 short level-{{ language[2] }}">
+              <img alt="{{ language[0] }}" src="/images/resume/{{ language[1] }}.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
