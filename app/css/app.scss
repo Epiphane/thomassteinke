@@ -512,10 +512,16 @@ hr {
 
   .item {
     z-index: 1;
-    background: #eee;
+    background: rgba(91, 192, 222, 0.44);
     border-radius: 3px;
     margin-bottom: 15px;
     padding: 15px;
+
+    &.not-active {
+      background: none;
+      border: 2px solid rgba(91, 192, 222, 0.44);
+      padding: 13px;
+    }
 
     &.short {
       height: 100px;
