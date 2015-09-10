@@ -3,8 +3,7 @@ angular.module('thomassteinke', [
 ]);
 
 angular.module('thomassteinke').config(function($locationProvider, $stateProvider, $urlRouterProvider) {
-  $locationProvider.html5Mode(true);
-
+   $locationProvider.html5Mode(true);
 	$urlRouterProvider.otherwise('/');
 
 	$stateProvider.state('home', {

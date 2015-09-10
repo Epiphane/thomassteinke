@@ -3,7 +3,7 @@
 @import "../bower_components/font-awesome/scss/font-awesome.scss";
 
 /** Variables */
-$pages: home, contact, games, resume;
+$pages: contact, games, resume;
 
 /** Document elements */
 html {
@@ -181,8 +181,10 @@ hr {
     }
   }
 
-  li > a:hover {
-    background-color: transparent;
+  li > a {
+    &:hover, &:focus {
+      background-color: transparent;
+    }
   }
 
   .navbar-nav {
@@ -285,11 +287,6 @@ hr {
   @each $page in $pages {
     &.#{$page} {
       background: url('/images/banner/#{$page}.png') no-repeat center;
-
-      @if $page == home {
-        background-position: center 0;
-        height: 100vh;
-      }
     }
   }
 
@@ -299,12 +296,13 @@ hr {
     @each $page in $pages {
       &.#{$page} {
         background: url('/images/banner/#{$page}@2x.png') no-repeat center;
-
-        @if $page == home {
-          background-position: center 0;
-        }
       }
     }
+  }
+
+  &.home {
+    background: #000;
+    height: 100vh
   }
 }
 
