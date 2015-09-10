@@ -16,45 +16,51 @@
    var canvas     = null;
    var context    = null;
    var fade       = 0;
-   var fadeSpeed  = 0.7;
-   var tilesize   = 10;
+   var fadeSpeed  = 0.1;
+   var fadeToNext = 0.25;
+   var tilesize   = 30;
+
+   var cells      = [];
+   var cursors    = [];
+
+   var addCursor = function(x, y) {
+      if (x >= canvasSize || y >= canvasSize) {
+         return;
+      }
+
+      if (!cells[y][x].hasCursor) {
+         cells[y][x].hasCursor = true;
+
+         cursors.push({
+            x: x,
+            y: y
+         });
+      }
+   };
+
+   var initializeCanvas = function() {
+      addCursor(0, 0);
+   };
+
+   var cursorFn   = function(cursor, cell) {
+      cell.visibility += fadeSpeed;
+
+      if (cell.visibility > fadeToNext) {
+         // Spread
+         addCursor(cursor.x, cursor.y + 1);
+         addCursor(cursor.x + 1, cursor.y);
+      }
+
+      if (cell.visibility >= 1) {
+         cell.visibility = 1;
+         return true;
+      }
+   };
 
    var imageCanvas = document.createElement('canvas');
    imageCanvas.width = document.body.clientWidth;
    imageCanvas.height = document.body.clientHeight;
    var imageCtx = imageCanvas.getContext('2d');
-
-   window.onresize = function() {
-      var resized = false;
-      if (document.body.clientWidth > imageCanvas.width) {
-         imageCanvas.width = document.body.clientWidth;
-         resized = true;
-      }
-      if (document.body.clientHeight > imageCanvas.height) {
-         imageCanvas.height = document.body.clientHeight;
-         resized = true;
-      }
-
-      if (resized) {
-
-         canvasSize = Math.max(imageCanvas.width, imageCanvas.height) / tilesize;
-
-         refresh();
-      }
-      
-      if (canvas) {
-         canvas.width = Math.min(document.body.clientWidth, imageCanvas.width);
-         canvas.height = Math.min(document.body.clientHeight, imageCanvas.height);
-      
-         if (context) {
-            drawToCanvas();
-         }
-      }
-   };
-
-   function drawToCanvas() {
-      context.drawImage(imageCanvas, 0, 0);
-   }
 
    function computeDist(x, y) {
       // Curve for now: x = 1 - (y - 0.5) ^ 2;
@@ -74,15 +80,11 @@
    }
 
    var rgb  = {r: 27,  g: 114, b: 152};
-   var line = {r: 180, g: 221, b: 239};
-   function fillRect(x, y, amount) {
-      if (y * tilesize >= imageCanvas.height || x * tilesize >= imageCanvas.width) {
-         return;
-      }
-
-      var padding = tilesize / 2 * (1 - amount);
-
+   var line = {r: 255, g: 255, b: 255};
+   function createCell(x, y) {
       var dist = computeDist(x, y);
+
+      dist += Math.random() * 0.5 - 0.25;
       
       // Curve it from (0, 1)
       dist = 1 / (1 + Math.pow(2, dist));
@@ -93,15 +95,75 @@
          b: Math.floor((1 - dist) * rgb.b + dist * line.b)
       };
 
-      imageCtx.fillStyle = 'rgb(' + computed.r + ', ' + computed.g + ', ' + computed.b + ')';
+      return {
+         visibility: 0,
+         hasCursor: false,
+         fillStyle: 'rgb(' + computed.r + ', ' + computed.g + ', ' + computed.b + ')'
+      };
+   }
+
+   window.onresize = function() {
+      var resized = false;
+      if (document.body.clientWidth > imageCanvas.width) {
+         imageCanvas.width = document.body.clientWidth;
+         resized = true;
+      }
+      if (document.body.clientHeight > imageCanvas.height) {
+         imageCanvas.height = document.body.clientHeight;
+         resized = true;
+      }
+
+      if (resized) {
+         var needsInitialize = (canvasSize === 0);
+
+         canvasSize = Math.max(imageCanvas.width, imageCanvas.height) / tilesize;
+         
+         // Resize arrays
+         while (cells.length < canvasSize) {
+            cells.push([]);
+         }
+         for (var row = 0; row < cells.length; row ++) {
+            while (cells[row].length < canvasSize) {
+               cells[row].push(createCell(cells[row].length, row));
+            }
+         }
+
+         refresh();
+      
+         if (needsInitialize) {
+            initializeCanvas();
+         }
+      }
+      
+      if (canvas) {
+         canvas.width = Math.min(document.body.clientWidth, imageCanvas.width);
+         canvas.height = Math.min(document.body.clientHeight, imageCanvas.height);
+      
+         if (context) {
+            drawToCanvas();
+         }
+      }
+   };
+
+   function drawToCanvas() {
+      context.drawImage(imageCanvas, 0, 0);
+   }
+
+   function fillRect(x, y, amount) {
+      if (y * tilesize >= imageCanvas.height || x * tilesize >= imageCanvas.width) {
+         return;
+      }
+
+      var padding = tilesize / 2 * (1 - amount);
+
+      imageCtx.fillStyle = cells[y][x].fillStyle;
       imageCtx.fillRect(x * tilesize + padding, y * tilesize + padding, amount * tilesize, amount * tilesize);
    }
 
    function refresh() {
-      var angledColumn = Math.floor(fade) - 1;
-      for (var i = angledColumn; i >= 0; i --) {
-         for (var j = 0; j + i <= angledColumn; j ++) {            
-            fillRect(i, j, 1);
+      for (var i = 0; i < canvasSize; i ++) {
+         for (var j = 0; j < canvasSize; j ++) {
+            fillRect(i, j, cells[i][j].visibility);
          }
       }
    }
@@ -116,29 +178,41 @@
       // Request next frame
       requestAnimationFrame(update);
 
-      if (Math.floor(fade) !== Math.floor(fade + fadeSpeed)) {
-         var diag = Math.floor(fade);
-         for (i = diag; i >= 0; i --) {
-            j = diag - i;
+      // if (Math.floor(fade) !== Math.floor(fade + fadeSpeed)) {
+      //    var diag = Math.floor(fade);
+      //    for (i = diag; i >= 0; i --) {
+      //       j = diag - i;
 
-            fillRect(i, j, 1);
-         }
-      }
+      //       fillRect(i, j, 1);
+      //    }
+      // }
 
-      if (fade > 2 * canvasSize) {
+      if (cursors.length === 0) {
          running = false;
       }
 
-      fade += fadeSpeed;
-      var angledColumn = Math.floor(fade);
+      // fade += fadeSpeed;
+      // var angledColumn = Math.floor(fade);
 
-      var dfade = fade % 1;
+      // var dfade = fade % 1;
 
-      for (i = angledColumn; i >= 0; i --) {
-         j = angledColumn - i;
+      // for (i = angledColumn; i >= 0; i --) {
+      //    j = angledColumn - i;
 
-         for (var di = 0; di < 4 && dfade - di / 4 > 0; di ++) {
-            fillRect(i + di, j, dfade - di / 4);
+      //    for (var di = 0; di < 4 && dfade - di / 4 > 0; di ++) {
+      //       fillRect(i + di, j, dfade - di / 4);
+      //    }
+      // }
+
+      for (i = 0; i < cursors.length; i ++) {
+         var cursor  = cursors[i];
+         var cell    = cells[cursor.y][cursor.x];
+         var dead    = cursorFn(cursor, cell);
+      
+         fillRect(cursor.x, cursor.y, cell.visibility);
+
+         if (dead) {
+            cursors.splice(i, 1);
          }
       }
 
