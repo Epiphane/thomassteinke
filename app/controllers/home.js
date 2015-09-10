@@ -18,13 +18,16 @@
    var fade       = 0;
    var fadeSpeed  = 0.1;
    var fadeToNext = 0.25;
-   var tilesize   = 30;
+   var tilesize   = 75;
+
+   var tile = new Image();
+   tile.src = '/images/tile.png';
 
    var cells      = [];
    var cursors    = [];
 
    var addCursor = function(x, y) {
-      if (x >= canvasSize || y >= canvasSize) {
+      if (x >= canvasSize || y >= canvasSize || x < 0 || y < 0) {
          return;
       }
 
@@ -39,7 +42,7 @@
    };
 
    var initializeCanvas = function() {
-      addCursor(0, 0);
+      addCursor(Math.floor(Math.random() * canvasSize), Math.floor(Math.random() * canvasSize));
    };
 
    var cursorFn   = function(cursor, cell) {
@@ -49,6 +52,8 @@
          // Spread
          addCursor(cursor.x, cursor.y + 1);
          addCursor(cursor.x + 1, cursor.y);
+         addCursor(cursor.x, cursor.y - 1);
+         addCursor(cursor.x - 1, cursor.y);
       }
 
       if (cell.visibility >= 1) {
@@ -98,7 +103,7 @@
       return {
          visibility: 0,
          hasCursor: false,
-         fillStyle: 'rgb(' + computed.r + ', ' + computed.g + ', ' + computed.b + ')'
+         fillStyle: 'rgba(' + computed.r + ', ' + computed.g + ', ' + computed.b + ', 0.6)'
       };
    }
 
@@ -155,6 +160,8 @@
       }
 
       var padding = tilesize / 2 * (1 - amount);
+
+      imageCtx.drawImage(tile, x * tilesize + padding, y * tilesize + padding, amount * tilesize, amount * tilesize);
 
       imageCtx.fillStyle = cells[y][x].fillStyle;
       imageCtx.fillRect(x * tilesize + padding, y * tilesize + padding, amount * tilesize, amount * tilesize);
