@@ -36,8 +36,6 @@ class Endpoint
    }
 
    public function respond($method, $path, $params) {
-      
-      
       if ($method === "GET") {
          $this->respondWith($this->get($path));
       }

@@ -18,7 +18,7 @@ class BaseEndpoint extends CRUDEndpoint
    ];
 
    public function shouldPassOn($method, $path) {
-      return count($path) === 2 && $path[0] !== "find";
+      return count($path) >= 2 && $path[0] !== "find";
    }
 
    public function get($path) {

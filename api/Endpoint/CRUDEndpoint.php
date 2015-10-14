@@ -72,17 +72,26 @@ class CRUDEndpoint extends Endpoint
    }
 
    public function post($path, $params) {
-      $newObj = $this->callMethod("build", [$params]);
+      if (count($path) === 0 || strlen($path[0]) === 0) {
+         $newObj = $this->callMethod("build", [$params]);
 
-      if ($params["test"]) {
-         $res = $newObj->read();
-         $res["saved"] = 0;
-         return $res;
+         if ($params["test"]) {
+            $newObj = $newObj->read();
+            $newObj["saved"] = 0;
+         }
+         else {
+            if (!$newObj->save()) {
+               return [
+                  "success" => false,
+                  "message" => "Object failed to save"
+               ];
+            }
+         }
+
+         return $newObj;
       }
       else {
-         $newObj->save();
+         return null;
       }
-
-      return $newObj;
    }
 }

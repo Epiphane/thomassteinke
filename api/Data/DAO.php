@@ -16,139 +16,245 @@ use \Data\InFilter;
 
 class DAO
 {
-	public $connection = null;
-	public $Model      = null;
-	public $tableName  = null;
-	public $colTypes   = [];
+   public $connection = null;
+   public $Model      = null;
+   public $tableName  = null;
+   public $colTypes   = [];
 
-	public static $supported_types = [ "int" => "i", "string" => "s" ];
+   public static $supported_types = [ "int" => "i", "string" => "s" ];
+   public static $column_types = [ "int" => "int(11)", "string" => "varchar(64)" ];
 
-	public function __construct($model) {
-		$this->Model     = $model;
-		$this->tableName = $model::$tableName;
+   public function __construct($model = null) {
+      if ($model) {
+         $this->Model     = $model;
+         $this->tableName = $model::$tableName;
 
-		foreach ($model::$columns as $col => $type) {
-			$this->colTypes[$col] = self::$supported_types[$type];
-		}
+         $this->setColumns($model::$columns);
+      }
 
-		$this->initDbConnection();
-	}
+      $this->initDbConnection();
+   }
 
-	protected function initDbConnection() {
-		$this->connection = \Data\DB::getConnection();
-	}
+   protected function initDbConnection() {
+      $this->connection = \Data\DB::getConnection();
+   }
 
-	public function build($model, $object) {
-		$res = $model::build($object, false);
-		$res->_new = false;
+   public function setColumns($columns) {
+      foreach ($columns as $col => $type) {
+         $this->colTypes[$col] = self::$supported_types[$type];
+      }
+   }
 
-		return $res;
-	}
+   public function build($model, $object) {
+      $res = $model::build($object, false);
+      $res->_new = false;
 
-	public function findOne($request) {
-		$result = $this->find($request);
+      return $res;
+   }
 
-		if ($result->size() > 0) {
-			return $result->first();
-		}
-		else {
-			return null;
-		}
-	}
+   public function findOne($request) {
+      $result = $this->find($request);
 
-	public function find($request) {
-		$query  = "SELECT * FROM " . $this->tableName;
-		$values = [];
-		$types  = [];
-		if (count($request->Filter) > 0) {
-			$qFilters = [];
-			foreach ($request->Filter as $filter) {
-				if ($filter instanceof InFilter) {
-					$qFilters[] = $filter->property . " " . $filter->comparator . " (" . join(", ", array_fill(0, count($filter->value), "?")) . ")";
-					for ($i = 0; $i < count($filter->value); $i ++) {
-						$values[] = &$filter->value[$i];
-						$types[] = $this->colTypes[$filter->property];
-					}
-				}
-				else {
-					$qFilters[] = $filter->property . " " . $filter->comparator . " ?";
-					$values[] = &$filter->value;
-					$types[] = $this->colTypes[$filter->property];
-				}
-			}
+      if ($result->size() > 0) {
+         return $result->first();
+      }
+      else {
+         return null;
+      }
+   }
 
-			$query .= " WHERE " . join(" AND ", $qFilters);
-		}
+   public function find($request) {
+      $query  = "SELECT * FROM " . $this->tableName;
+      $values = [];
+      $types  = [];
+      if (count($request->Filter) > 0) {
+         $qFilters = [];
+         foreach ($request->Filter as $filter) {
+            if ($filter instanceof InFilter) {
+               $qFilters[] = $filter->property . " " . $filter->comparator . " (" . join(", ", array_fill(0, count($filter->value), "?")) . ")";
+               for ($i = 0; $i < count($filter->value); $i ++) {
+                  $values[] = &$filter->value[$i];
+                  $types[] = $this->colTypes[$filter->property];
+               }
+            }
+            else {
+               $qFilters[] = $filter->property . " " . $filter->comparator . " ?";
+               $values[] = &$filter->value;
+               $types[] = $this->colTypes[$filter->property];
+            }
+         }
 
-		$q = $this->connection->prepare($query);
+         $query .= " WHERE " . join(" AND ", $qFilters);
+      }
 
-		if (count($request->Filter) > 0) {
-			call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
-		}
+      if (count($request->Sort) > 0) {
+         $query .= " ORDER BY ";
 
-		$result = $q->execute();
-		$objects = [];
-		if ($result) {
-			$res = $q->get_result();
-			while ($row = $res->fetch_assoc()) {
-				$objects[] = $this->build($this->Model, $row);
-			}
-		}
-			
-		return new Collection($objects);
-	}
+         // Check column list
+         // TODO list
+         $sort = $request->Sort[0];
+         if ($this->colTypes[$sort->property]) {
+            $query .= $sort->property . " " . $sort->direction;
+         }
+      }
 
-	public function create($model) {
-		$query = "INSERT INTO " . $this->tableName;
+      $q = $this->connection->prepare($query);
 
-		$vals = array();
-		foreach ($this->colTypes as $column => $type) {
-			if ($model->$column !== null) {
-				$columns[] = $column;
-				$types[] = $type;
-				$vals[] = $model->$column;
-			}
-		}
+      if (count($request->Filter) > 0) {
+         call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+      }
 
-		foreach ($vals as $id => $value) {
-			$values[] = &$vals[$id];
-		}
-	
-		$query .= "(" . join(", ", $columns) . ")";
-		$query .= " VALUES (" . join(",", array_fill(0, count($values), "?")) . ")";
-		
-		$q = $this->connection->prepare($query);
-		call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+      $result = $q->execute();
+      $objects = [];
+      if ($result) {
+         $res = $q->get_result();
+         while ($row = $res->fetch_assoc()) {
+            $objects[] = $this->build($this->Model, $row);
+         }
+      }
+         
+      return new Collection($objects);
+   }
 
-		$result = $q->execute();
-		if ($result) {
-			return $model;
-		}
-		else {
-			return NULL;
-		}
-	}
+   private function generateRandomString($length = 10) {
+      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      $charactersLength = strlen($characters);
+      $randomString = '';
+      for ($i = 0; $i < $length; $i++) {
+         $randomString .= $characters[rand(0, $charactersLength - 1)];
+      }
 
-	public function update($model, $attrs) {
-		$query = "UPDATE " . $this->tableName . " SET ";
+      return $randomString;
+   }
 
-		foreach ($attrs as $column => $value) {
-			$sets[] = $column . " = ?";
-			$values[] = &$attrs[$column];
-			$types[] = $this->colTypes[$column];;
+   public function query($query) {
+      $q = $this->connection->prepare($query);
 
-			$model->$column = $value;
-		}
+      if (!$q) {
+         return null;
+      }
 
-		$pKey = $model::getPrimaryKey($model);
-		$query .= join(", ", $sets) . " WHERE " . $pKey . " = ?";
-		$values[] = &$model->$pKey;
-		$types[] = $this->colTypes[$pKey];
+      if (func_num_args() > 1) {
+         $values = array_slice(func_get_args(), 1);
+         if (is_array($values[0]) && func_num_args() === 2) {
+            $values = $values[0];
+         }
 
-		$q = $this->connection->prepare($query);
-		call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+         $types = [];
+         foreach ($values as $arg) {
+            if (is_numeric($arg)) {
+               $types[] = "i";
+            }
+            else {
+               $types[] = "s";
+            }
+         }
 
-		$result = $q->execute();
-		return $model;
-	}
+         call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+      }
+
+      $result = $q->execute();
+      if ($result) {
+         return $q->get_result();
+      }
+      else {
+         return NULL;
+      }
+   }
+
+   public function createTable($fields) {
+      $tableName = $this->generateRandomString(16);
+      
+      $i = 0;
+      $fieldNames = [];
+      $associations = [];
+      foreach ($fields as $column => $type) {
+         if (!self::$column_types[$type]) {
+            return [
+               "success" => false,
+               "message" => "Column type " . $type . " not supported"
+            ];
+         }
+
+         $colName = "col_" . $i++;
+
+         $associations[$column] = $colName;
+         $fieldNames[] = $colName . " " . self::$column_types[$type];
+      }
+
+      $query = "CREATE TABLE {$tableName} (" . join(", ", $fieldNames) . ")";
+
+      $q = $this->connection->prepare($query);
+
+      $result = $q->execute();
+      if ($result) {
+         return [
+            "table" => $tableName,
+            "associations" => $associations
+         ];
+      }
+      else {
+         return NULL;
+      }
+   }
+
+   public function create($model) {
+      $query = "INSERT INTO " . $this->tableName;
+
+      $vals = array();
+      foreach ($this->colTypes as $column => $type) {
+         if ($model->$column !== null) {
+            $columns[] = "`" . $column . "`";
+            $types[] = $type;
+
+            if (is_array($model->$column)) {
+               $vals[] = json_encode($model->$column);
+            }
+            else {
+               $vals[] = $model->$column;
+            }
+         }
+      }
+
+      foreach ($vals as $id => $value) {
+         $values[] = &$vals[$id];
+      }
+
+      $query .= " (" . join(", ", $columns) . ")";
+      $query .= " VALUES (" . join(",", array_fill(0, count($values), "?")) . ")";
+      
+      $q = $this->connection->prepare($query);
+      call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+
+      $result = $q->execute();
+      if ($result) {
+         return $model;
+      }
+      else {
+         return NULL;
+      }
+   }
+
+   public function update($model, $attrs) {
+      $query = "UPDATE " . $this->tableName . " SET ";
+
+      foreach ($attrs as $column => $value) {
+         $sets[] = $column . " = ?";
+         $values[] = &$attrs[$column];
+         $types[] = $this->colTypes[$column];;
+
+         $model->$column = $value;
+      }
+
+      $pKey = $model::getPrimaryKey($model);
+      $query .= join(", ", $sets) . " WHERE " . $pKey . " = ?";
+      $values[] = &$model->$pKey;
+      $types[] = $this->colTypes[$pKey];
+
+      $q = $this->connection->prepare($query);
+      call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+
+      $result = $q->execute();
+      return $model;
+   }
 }

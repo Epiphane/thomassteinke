@@ -15,17 +15,61 @@ class QuickAppObject extends \Data\Model
 
    public static $columns = [
       "app_id" => "int",
-      "name" => "string"
+      "name" => "string",
+      "table" => "string",
+      "fields" => "string",
+      "associations" => "string"
    ];
 
    public static $const_columns = [
-      "app_id", "name"
+      "app_id", "name", "table", "fields", "associations"
    ];
 
    public $app_id;
    public $name;
+   public $table;
+   public $fields;
+   public $associations;
+
+   public static function build($assoc) {
+      $model = parent::build($assoc);
+
+      $model->fields = json_decode($model->fields);
+      $model->associations = json_decode($model->associations);
+
+      return $model;
+   }
+
+   public function save() {
+      $model = get_called_class();
+      $dao = new \Data\DAO($model);
+   
+      if ($this->_new) {
+         // Create new table
+         $table = $dao->createTable($this->fields);
+         if (!$table) {
+            return null;
+         }
+
+         $this->table = $table["table"];
+         $this->associations = $table["associations"];
+
+         return $dao->create($this);
+      }
+      else {
+         return $dao->update($this, $model);
+      }
+   }
 
    public function createPrimaryKey($rerun = null) {
       return $this->app_id;
+   }
+
+   public function read() {
+      return [
+         "app_id" => $this->app_id,
+         "name" => $this->name,
+         "fields" => $this->fields,
+      ];
    }
 }

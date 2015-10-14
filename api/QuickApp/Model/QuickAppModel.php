@@ -70,33 +70,6 @@ class QuickAppModel extends \Data\Model
    //    return self::findOne($request);
    // }
 
-   // public function read() {
-   //    $properties = [ "boring" => true ];
-   //    foreach($this->properties as $prop) {
-   //       $properties[$prop->property] = $prop->value;
-   //    }
-
-   //    $properties["level"] = $this->level;
-   //    $properties["class"] = $this->class;
-   //    $properties["nickname"] = $this->nickname;
-   //    $properties["experience"] = $this->experience;
-   //    $properties["health"] = $this->health;
-   //    $properties["max_health"] = $this->max_health;
-
-   //    $possessions = array();
-   //    foreach($this->ownerships as $obj) {
-   //       $possessions[] = $obj->subject_id;
-   //    }
-
-   //    return [
-   //       "object_id" => $this->object_id,
-   //       "name" => $this->name,
-   //       "region" => $this->region,
-   //       "properties" => $properties,
-   //       "possessions" => $possessions
-   //    ];
-   // }
-
    // public function setProperty($prop, $val) {
    //    // Look through existing properties
    //    foreach ($this->properties as $property) {
