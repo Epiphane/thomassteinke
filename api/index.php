@@ -1,35 +1,22 @@
 <?php
-include("db.php");
 
-include("quick.php");
+require_once(__DIR__ . "/init.php");
 
-$request = array_slice(explode("/", $_SERVER[REQUEST_URI]), 2);
-$method = $_SERVER[REQUEST_METHOD];
+use \QuickApp\Model\QuickAppModel;
 
-switch($request[0]) {
-   case "quick":
-      quickAndEasy($connect, $request, $method);
-      break;
-   default:
-      echo "Welcome to my secret hideout!";
+function _log($message) {
+   file_put_contents(__DIR__ . "/requests.log", $message . "\n", FILE_APPEND);
 }
 
-function refValues($arr){
-   //Reference is required for PHP 5.3+
-   if (strnatcmp(phpversion(),'5.3') >= 0) {
-      $refs = array();
-      foreach($arr as $key => $value) {
-         $refs[$key] = &$arr[$key];
-      }
+$url = substr($_SERVER["REQUEST_URI"], strlen("/api/"));
+_log($_SERVER["REQUEST_METHOD"] . " " . $url);
+if (strrpos($url, "?"))
+   $url = substr($url, 0, strrpos($url, "?"));
+$path = explode("/", $url);
 
-      return $refs;
-   }
-   return $arr;
-}
+$params = json_decode(file_get_contents("php://input"), TRUE);
 
-function send404AndDie() {
-   header('HTTP/1.0 404 Not Found');
-   die();
-}
+$handler = new \Endpoint\BaseEndpoint();
+$handler->respond($_SERVER["REQUEST_METHOD"], $path, $params);
 
 ?>
