@@ -9,8 +9,26 @@
 namespace Endpoint;
 
 use \QuickApp\Model\QuickAppModel;
+use \User\Controller\UserTokenController;
 use \QuickApp\Controller\QuickAppObjectController;
 use \Data\Filter;
+
+if (!function_exists('getallheaders')) 
+{ 
+   function getallheaders() { 
+      $headers = ''; 
+      foreach ($_SERVER as $name => $value) { 
+         if (substr($name, 0, 5) == 'HTTP_') { 
+            $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value; 
+         } 
+
+         if ($name === "REDIRECT_HTTP_AUTHORIZATION") {
+            $headers["Authorization"] = $value;
+         }
+      } 
+      return $headers; 
+   } 
+} 
 
 class ObjectEndpoint extends CRUDEndpoint
 {
@@ -32,6 +50,16 @@ class ObjectEndpoint extends CRUDEndpoint
    }
 
    public function post($path, $params) {
+      $app = QuickAppModel::findById($this->params[0]);
+
+      $authorization = getallheaders()["Authorization"];
+      $token = substr($authorization, strlen("Bearer "));
+
+      if (!UserTokenController::authenticate($app->owner_id, $token)) {
+         $this->sendStatus(403);
+         return false;
+      }
+
       if (count($path) === 0 || strlen($path[0]) === 0) {
          $params["app_id"] = $this->params[0];
 
@@ -53,5 +81,10 @@ class ObjectEndpoint extends CRUDEndpoint
 
          return QuickAppObjectController::createObject($model, $params);
       }
+   }
+
+   public function put($path, $params) {
+      var_dump($path);
+      var_dump($params);
    }
 }

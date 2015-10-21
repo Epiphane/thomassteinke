@@ -63,10 +63,11 @@ class DAO
       }
    }
 
-   public function find($request) {
-      $query  = "SELECT * FROM " . $this->tableName;
+   public function formatRequest($request) {
+      $query  = "";
       $values = [];
       $types  = [];
+
       if (count($request->Filter) > 0) {
          $qFilters = [];
          foreach ($request->Filter as $filter) {
@@ -98,11 +99,32 @@ class DAO
          }
       }
 
+      if ($request->limit > 0) {
+         $query .= " LIMIT " . $request->limit;
+      }
+
+      return [
+         "query" => $query,
+         "values" => $values,
+         "types" => $types
+      ];
+   }
+
+   public function bindQuery($query, $request) {
+      $params = $this->formatRequest($request);
+      $query  = $query . $params["query"];
+
       $q = $this->connection->prepare($query);
 
-      if (count($request->Filter) > 0) {
-         call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+      if (count($params["values"]) > 0) {
+         call_user_func_array([$q, "bind_param"], array_merge([implode($params["types"])], $params["values"]));
       }
+
+      return $q;
+   }
+
+   public function find($request) {
+      $q = $this->bindQuery("SELECT * FROM " . $this->tableName, $request);
 
       $result = $q->execute();
       $objects = [];
@@ -116,6 +138,16 @@ class DAO
       return new Collection($objects);
    }
 
+   /* BE CAREFUL WITH THIS ONE DOOFUS */
+   public function dropPermanently($request) {
+      $q = $this->bindQuery("DELETE FROM " . $this->tableName, $request);
+
+      $result = $q->execute();
+      if ($result) {
+         return $q->get_result();
+      }
+   }
+
    private function generateRandomString($length = 10) {
       $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
       $charactersLength = strlen($characters);
@@ -127,14 +159,16 @@ class DAO
       return $randomString;
    }
 
-   public function query($query) {
-      $q = $this->connection->prepare($query);
+   public static function query($query) {
+      $connection = \Data\DB::getConnection();
+      $q = $connection->prepare($query);
 
       if (!$q) {
          return null;
       }
 
       if (func_num_args() > 1) {
+         $refs = [];
          $values = array_slice(func_get_args(), 1);
          if (is_array($values[0]) && func_num_args() === 2) {
             $values = $values[0];
@@ -148,9 +182,11 @@ class DAO
             else {
                $types[] = "s";
             }
+
+            $refs[] = &$values;
          }
 
-         call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));
+         call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $refs));
       }
 
       $result = $q->execute();
@@ -231,7 +267,10 @@ class DAO
          return $model;
       }
       else {
-         return NULL;
+         return [
+            "success" => false,
+            "message" => $q->error
+         ];
       }
    }
 

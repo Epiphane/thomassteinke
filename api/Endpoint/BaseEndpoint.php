@@ -10,29 +10,30 @@ namespace Endpoint;
 
 use \QuickApp\Model\QuickAppModel;
 
-class BaseEndpoint extends CRUDEndpoint
+class BaseEndpoint extends Endpoint
 {
-   protected static $Model = "\QuickApp\Model\QuickAppModel";
-   protected static $subpaths = [
-      "objects" => "\Endpoint\ObjectEndpoint"
-   ];
-
-   public function shouldPassOn($method, $path) {
-      return count($path) >= 2 && $path[0] !== "find";
-   }
-
-   public function get($path) {
-      if (count($path) === 0 || strlen($path[0]) === 0) {
-         return $this->callMethod("find", new \Data\Request());
+   public function respond($method, $path, $params) {
+      if ($path[0] === "quick") {
+         $handler = new \Endpoint\QuickEndpoint();
       }
-      elseif ($path[0] === "find") {
-         $request = new \Data\Request();
-         $request->Filter[] = new \Data\Filter("name", $path[1]);
-
-         return $this->callMethod("find", $request);
+      elseif ($path[0] === "user") {
+         $handler = new \Endpoint\UserEndpoint();
       }
-      elseif (is_numeric($path[0])) {
-         return $this->callMethod("findById", $path[0]);
+      elseif ($path[0] === "yesno") {
+         $handler = new \Endpoint\YesNoEndpoint();
+      }
+      elseif ($path[0] === "taco") {
+         $handler = new \Endpoint\TacoEndpoint();
+      }
+      elseif ($path[0] === "fight") {
+         $handler = new \Endpoint\FightEndpoint();
+      }
+
+      if ($handler) {
+         $handler->respond($_SERVER["REQUEST_METHOD"], array_slice($path, 1), $params);
+      }
+      else {
+         $this->sendStatus(404);
       }
    }
 }

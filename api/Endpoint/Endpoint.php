@@ -32,7 +32,9 @@ class Endpoint
       header($status_header);
       header('Content-Type: text/html');
 
-      echo 'Not found.';
+      if ($status === 404) {
+         echo 'Not found.';
+      }
    }
 
    public function respond($method, $path, $params) {
@@ -62,7 +64,7 @@ class Endpoint
             $this->sendResponse($result);
          }
       }
-      else {
+      elseif ($result !== false) {
          $this->sendStatus(404);
       }
    }

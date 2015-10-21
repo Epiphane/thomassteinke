@@ -103,6 +103,13 @@ class Model
 		return self::findOne($request);
 	}
 
+	public static function findWhere($property, $value) {
+		$request = new \Data\Request();
+		$request->Filter[] = new \Data\Filter($property, $value);
+
+		return self::findOne($request);
+	}
+
 	public static function find($request) {
 		$dao = new \Data\DAO(get_called_class());
 

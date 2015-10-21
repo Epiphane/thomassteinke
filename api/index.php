@@ -4,6 +4,8 @@ require_once(__DIR__ . "/init.php");
 
 use \QuickApp\Model\QuickAppModel;
 
+header('Access-Control-Allow-Origin: *');
+
 function _log($message) {
    file_put_contents(__DIR__ . "/requests.log", $message . "\n", FILE_APPEND);
 }

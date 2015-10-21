@@ -52,11 +52,13 @@ class QuickAppObjectController
       $dao = self::createDAO($ObjectType);
       $associations = $ObjectType->associations;
 
-      $model = new \stdClass();
+      $model = new \QuickApp\Model\QuickAppObjectSkeleton();
 
       foreach ($params as $column => $value) {
          $colName = $associations->$column;
          $model->$colName = $value;
+
+         $model->assoc[$colName] = $value;
       }
 
       return self::translateToObject($ObjectType, $dao->create($model));
@@ -77,6 +79,10 @@ class QuickAppObjectController
          }
 
          $request->Sort[] = new \Data\Sort($sortProperty, strtoupper($_GET["dir"]));
+      }
+
+      if (is_numeric($_GET["limit"])) {
+         $request->limit = $_GET["limit"];
       }
 
       return self::translateToObject($ObjectType, $dao->find($request));

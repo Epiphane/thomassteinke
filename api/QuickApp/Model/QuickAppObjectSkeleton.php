@@ -15,7 +15,7 @@ class QuickAppObjectSkeleton extends \Data\Model
    public static $columns = [];
    public static $const_columns = [];
 
-   private $assoc;
+   public $assoc = [];
 
    public static function build($assoc) {
       $model = new QuickAppObjectSkeleton();
