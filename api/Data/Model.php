@@ -17,25 +17,24 @@ class Model
 
 	public $_new = true;
 
-	public static function build($assoc) {
+	public static function build($assoc, $new = true) {
 		$m = get_called_class();
 		$model = new $m();
+      $model->_new = $new;
 
 		foreach($assoc as $col => $val) {
 			$model->$col = $val;
 		}
 
-		// Create primary key if not exists
-		$pKey = self::getPrimaryKey($m);
-		if (!$model->$pKey) {
-			$model->$pKey = $model->createPrimaryKey();
+		if ($new) {
+			$model->generatePrimaryKey();
 
 			// COLLISION CHECK
 			$runs = 1;
-			while($m::findById($model->$pKey)) {
-				_log("Collision on Primary key " . $pKey . "=" . $model->$pKey);
+			while(call_user_func_array([$m, "findById"], $model->getPrimaryKeyValues())) {
+				_log("Collision on Primary key " . $pKey . "=" .json_encode($model->getPrimaryKeyValues()));
 
-				$model->$pKey = $model->createPrimaryKey($runs++);
+				$model->generatePrimaryKey($runs++);
 
 				if ($runs === 10) {
 					_log("10 collisions, aborting..");
@@ -54,11 +53,37 @@ class Model
 			reset($m::$columns);
 			$key = key($m::$columns);
 		}
+		if (!is_array($key)) {
+			$key = [$key];
+		}
 		return $key;
 	}
 
-	public function createPrimaryKey($rerun = null) {
-		return mt_rand(100000000, 999999999);
+	public function getPrimaryKeyValues() {
+		$pKey = self::getPrimaryKey(get_called_class());
+
+		$result = [];
+		foreach ($pKey as $key) {
+			$result[] = $this->$key;
+		}
+
+		return $result;
+	}
+
+	public function generatePrimaryKey($rerun = null) {
+		$pKey = self::getPrimaryKey(get_called_class());
+
+		foreach ($pKey as $key) {
+			if (!$this->$key) {
+				$method = "__gen_" . $key;
+				if (is_callable($this->$method)) {
+					$this->$key = $this->$method();
+				}
+				else {
+					$this->$key = mt_rand(100000000, 999999999);
+				}
+			}
+		}
 	}
 
 	public function save() {
@@ -69,7 +94,7 @@ class Model
 			return $dao->create($this);
 		}
 		else {
-			return $dao->update($this, $model);
+			return $dao->update($model, $this);
 		}
 	}
 
@@ -98,16 +123,29 @@ class Model
 	public static function findById($id) {
 		$request = new \Data\Request();
 		$pKey    = self::getPrimaryKey(get_called_class());
-		$request->Filter[] = new \Data\Filter($pKey, $id);
+		foreach ($pKey as $index => $key) {
+			$request->Filter[] = new \Data\Filter($key, func_get_arg($index));
+		}
 
 		return self::findOne($request);
 	}
 
-	public static function findWhere($property, $value) {
+	public static function findOneWhere($properties) {
 		$request = new \Data\Request();
-		$request->Filter[] = new \Data\Filter($property, $value);
+		foreach ($properties as $property => $value) {
+			$request->Filter[] = new \Data\Filter($property, $value);
+		}
 
 		return self::findOne($request);
+	}
+
+	public static function findWhere($properties) {
+		$request = new \Data\Request();
+		foreach ($properties as $property => $value) {
+			$request->Filter[] = new \Data\Filter($property, $value);
+		}
+
+		return self::find($request);
 	}
 
 	public static function find($request) {

@@ -15,15 +15,21 @@ class FightModel extends \Data\Model
 
    public static $columns = [
       "fight_id" => "int",
+      "channel_id" => "string",
       "user_id" => "int",
-      "status" => "int"
+      "status" => "string",
+      "health" => "int"
    ];
 
    public static $const_columns = [
-      "fight_id", "user_id"
+      "fight_id", "channel_id", "user_id"
    ];
 
+   public static $pKey = ["fight_id", "channel_id", "user_id"];
+
    public $fight_id;
+   public $channel_id;
    public $user_id;
    public $status;
+   public $health;
 }

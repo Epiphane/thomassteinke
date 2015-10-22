@@ -15,7 +15,8 @@ class FightUserModel extends \Data\Model
       "user_id" => "int",
       "team_id" => "string",
       "name" => "string",
-      "health" => "int",
+      "level" => "int",
+      "experience" => "int"
    ];
 
    public static $const_columns = [
@@ -25,7 +26,8 @@ class FightUserModel extends \Data\Model
    public $user_id;
    public $team_id;
    public $name;
-   public $health;
+   public $level;
+   public $experience;
 
    public function tag() {
       return "<@" . $this->name . ">";

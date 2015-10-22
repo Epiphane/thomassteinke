@@ -29,6 +29,8 @@ class FightEndpoint extends Endpoint
    }
    */
    public function wrapSlack($text) {
+      if ($text === null) return [];
+
       if (!is_string($text)) {
          $text = json_encode($text);
       }
@@ -41,7 +43,7 @@ class FightEndpoint extends Endpoint
    public function fight($params) {
       $user = FightController::findUser($params["team_id"], $params["user_id"]);
 
-      return FightController::fight($user, $params["trigger_word"], $params["text"]);      
+      return $user->tag() . ": " . FightController::fight($user, $params["channel_id"], $params["trigger_word"], $params["text"]);
    }
 
    public function post($path, $params) {

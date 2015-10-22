@@ -36,6 +36,11 @@
             <img src="/images/resume/{{ item.image }}" />
           </div>
     		</div>
+        <a ui-sref="pages.landing.games" ng-show="viewProjects">
+          <div class="btn btn-secondary item col-xs-12">
+            See My Games
+          </div>
+        </a>
         <div class="item col-xs-12" ng-repeat="item in projects" ng-show="viewProjects">
           <div class="col-sm-10 no-gutter">
             <h3><a href="{{ item.link }}" target="_blank">{{ item.title }}</a></h3>

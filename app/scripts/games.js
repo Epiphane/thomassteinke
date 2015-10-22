@@ -1,6 +1,117 @@
 angular.module('thomassteinke').factory('games', function($sce) {
   var games = {};
 
+  games['quicksilver'] = {
+    title: 'Quicksilver',
+    thumb: 'quicksilver.png',
+    image: 'quicksilver.png',
+    quotes: [
+      {
+        quote: 'Simple concept very well executed, what else to say but good job :)',
+        author: {
+          link: 'http://gamejolt.com/profile/tselmek/382466',
+          name: 'Tselmek',
+          tag: 'on Gamejolt'
+        }
+      }
+    ],
+    link: 'http://gamejolt.com/games/quicksilver/85076',
+    showcase: [
+      {
+        link: 'http://gamejolt.com/games/quicksilver/85076',
+        image: '/images/external/gamejolt.svg'
+      },
+      {
+        link: 'http://gamejolt.com/games/quicksilver/85076',
+        image: '/images/games/quicksilver-ratings.png'
+      }
+    ],
+    color: '#87B77F',
+    authors: 'Thomas Steinke, Elliot Fiske, Max Linsenbard',
+    desc: 'Momentum-centric arcade game set in 8-bit GameBoy style',
+    description: 'Quicksilver is a momentum-centric arcade game set in 8-bit GameBoy style. Use the power of drilling through the Earth to restore an ancient shrine and save your people.',
+  };
+
+  games['spellbound'] = {
+    title: 'Spellbound',
+    thumb: 'spellbound.png',
+    image: 'spellbound.png',
+    quotes: [
+      {
+        quote: 'Simple concept very well executed, what else to say but good job :)',
+        author: {
+          link: 'http://gamejolt.com/profile/tselmek/382466',
+          name: 'Tselmek',
+          tag: 'on Gamejolt'
+        }
+      }
+    ],
+    link: 'http://gamejolt.com/games/spellbound/80361',
+    showcase: [
+      {
+        link: 'http://gamejolt.com/games/spellbound/80361',
+        image: '/images/external/gamejolt.svg'
+      },
+      {
+        link: 'http://gamejolt.com/games/spellbound/80361',
+        image: '/images/games/spellbound-ratings.png'
+      }
+    ],
+    color: '#407D36',
+    authors: 'Thomas Steinke, Elliot Fiske, Max Linsenbard, Feek McDermott, Jacob Johanneson',
+    desc: 'Wands aren\'t the only way to beat monsters!',
+    description: 'You\'re like any normal wizard, except you don\'t quite...get it. Instead of learning spells from books, you throw the books at your enemies!</p><p>Descend through the levels of your local alchemy school and rack up points to show Merlin\'s Men that wands aren\'t the only way to beat monsters.'
+  };
+
+  games['rgbzero'] = {
+    title: 'RGB Zero',
+    thumb: 'rgbzero.png',
+    image: 'rgbzero@2x.png',
+    captures: [
+      'rgbzero-sc0.png',
+      'rgbzero-sc1.png',
+      'rgbzero-sc2.png',
+      'rgbzero-sc3.png',
+      'rgbzero-sc4.png',
+    ],
+    link: 'thomassteinke.com/RGBZero/',
+    showcase: [
+      {
+        link: 'http://thomassteinke.com/RGBZero/',
+        text: 'Game Page'
+      }
+    ],
+    color: '#87B77F',
+    authors: 'Thomas Steinke, Elliot Fiske, Max Linsenbard, David Ellison, Jonathan Pae, Cary Dobeck',
+    desc: 'Fast-paced realtime racing game set to exciting music.',
+    description: 'RGB Zero immerses the user in a fast-paced racing environment where the goal is simply to go fast. Taking initial influence from games like Thumper and F-Zero, RGB Zero shows off its seamless gameplay integration with the beats of seven different songs. During the duration of the song, obstacles of three different colors (Red, Green, and Blue) will spawn on the track. Moving the ship to the same colored track as the obstacle will slightly increase the ship\'s speed.</p><p>Users are also presented with five different F-Zero models, each with their own unique stats and boosting abilities adding further replay value.</p><p>If that\'s not enticing enough, we\'ve also included a global high score for you to practice songs you want to master.',
+  };
+
+  games['sabotage'] = {
+    title: 'Sabotage',
+    thumb: 'sabotage.png',
+    image: 'sabotage.png',
+    captures: [
+      'sabotage-sc0.png',
+      'sabotage-sc1.png'
+    ],
+    link: 'http://globalgamejam.org/2015/games/sabotage-0',
+    showcase: [
+      {
+        link: 'http://globalgamejam.org/',
+        image: '/images/external/globalgamejam.png'
+      },
+      {
+        link: 'http://globalgamejam.org/2014/jam-sites/cal-poly',
+        text: '<span class="fa fa-star"></span> First place on campus'
+      }
+    ],
+    color: '#01307C',
+    authors: 'Thomas Steinke, Elliot Fiske, Max Linsenbard, & Aaron Brown',
+    desc: '4 player party game composed of multiple mini-games. Each round, three of the players attempt to achieve a goal while the fourth is out to Sabotage them.',
+    description: '4 player party game composed of multiple mini-games. Each round, three of the players attempt to achieve a goal while the fourth is out to Sabotage them.',
+  };
+
   games['kickbox'] = {
     title: 'Kickbox',
     thumb: 'kickbox.png',

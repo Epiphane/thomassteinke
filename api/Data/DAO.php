@@ -47,7 +47,6 @@ class DAO
 
    public function build($model, $object) {
       $res = $model::build($object, false);
-      $res->_new = false;
 
       return $res;
    }
@@ -286,9 +285,19 @@ class DAO
       }
 
       $pKey = $model::getPrimaryKey($model);
-      $query .= join(", ", $sets) . " WHERE " . $pKey . " = ?";
-      $values[] = &$model->$pKey;
-      $types[] = $this->colTypes[$pKey];
+      if (!is_array($pKey)) {
+         $pKey = [$pKey];
+      }
+
+      $keys = [];
+      foreach ($pKey as $key) {
+         $keys[] = $key . " = ?";
+
+         $values[] = &$model->$key;
+         $types[] = $this->colTypes[$key];
+      }
+
+      $query .= join(", ", $sets) . " WHERE " . implode(" AND ", $keys);
 
       $q = $this->connection->prepare($query);
       call_user_func_array([$q, "bind_param"], array_merge([implode($types)], $values));

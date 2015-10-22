@@ -32,7 +32,7 @@ class QuickAppObject extends \Data\Model
    public $associations;
 
    public static function build($assoc) {
-      $model = parent::build($assoc);
+      $model = forward_static_call_array([parent, "build"], func_get_args());
 
       $model->fields = json_decode($model->fields);
       $model->associations = json_decode($model->associations);
@@ -61,9 +61,7 @@ class QuickAppObject extends \Data\Model
       }
    }
 
-   public function createPrimaryKey($rerun = null) {
-      return $this->app_id;
-   }
+   public function generatePrimaryKey($rerun = null) {}
 
    public function read() {
       return [
