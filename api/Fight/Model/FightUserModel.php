@@ -13,10 +13,14 @@ class FightUserModel extends \Data\Model
 
    public static $columns = [
       "user_id" => "int",
+      "slack_name" => "string",
       "team_id" => "string",
+      "AI" => "int",
       "name" => "string",
       "level" => "int",
-      "experience" => "int"
+      "experience" => "int",
+      "weapon" => "int",
+      "armor" => "int",
    ];
 
    public static $const_columns = [
@@ -24,12 +28,22 @@ class FightUserModel extends \Data\Model
    ];
 
    public $user_id;
+   public $slack_name;
    public $team_id;
+   public $AI;
    public $name;
    public $level;
    public $experience;
+   public $weapon;
+   public $armor;
 
    public function tag() {
+      if ($this->name === "UCRAFTBOT") {
+         return "CraftBot";
+      }
+      if ($this->AI && $this->name !== "USLACKBOT") {
+         return ucwords($this->name);
+      }
       return "<@" . $this->name . ">";
    }
 }

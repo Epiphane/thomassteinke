@@ -35,6 +35,10 @@ class Collection
       return count($this->objects);
    }
 
+   public function at($index) {
+      return $this->objects[$index];
+   }
+
    public function first() {
       return $this->objects[0];
    }

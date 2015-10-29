@@ -276,12 +276,23 @@ class DAO
    public function update($model, $attrs) {
       $query = "UPDATE " . $this->tableName . " SET ";
 
+      $vals = [];
       foreach ($attrs as $column => $value) {
          $sets[] = $column . " = ?";
-         $values[] = &$attrs[$column];
          $types[] = $this->colTypes[$column];;
 
+         if (is_array($attrs[$column])) {
+            $vals[] = json_encode($attrs[$column]);
+         }
+         else {
+            $vals[] = $attrs[$column];
+         }
+
          $model->$column = $value;
+      }
+
+      foreach ($vals as $id => $value) {
+         $values[] = &$vals[$id];
       }
 
       $pKey = $model::getPrimaryKey($model);

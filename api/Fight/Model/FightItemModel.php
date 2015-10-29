@@ -16,7 +16,8 @@ class FightItemModel extends \Data\Model
       "user_id" => "int",
       "name" => "string",
       "stats" => "string",
-      "type" => "string"
+      "type" => "string",
+      "deleted" => "int"
    ];
 
    public static $const_columns = [
@@ -28,6 +29,7 @@ class FightItemModel extends \Data\Model
    public $name;
    public $stats;
    public $type;
+   public $deleted;
 
    public static function build($assoc) {
       $model = forward_static_call_array([parent, "build"], func_get_args());
@@ -39,11 +41,30 @@ class FightItemModel extends \Data\Model
       return $model;
    }
 
+   public function desc() {
+      return [
+         $this->name,
+         $this->shortdesc(),
+         "Type `equip (weapon|armor) " . $this->name . "` to equip this item",
+         "Type `item drop " . $this->name . "` to drop this item"
+      ];
+   }
+
    public function shortdesc() {
-      foreach ($this->stats as $stat => $value) {
-         return $stat . "=" . $value;
+      $output = "";
+      if ($this->stats["alignment"]) {
+         $output .= "`" . ucwords($this->stats["alignment"]) . "` alignment, ";
+         $output .= "`" . $this->stats["elemental"] . " " . $this->stats["alignment"] . "` & ";
+      }
+      $output .= "`" . $this->stats["physical"] . " physical` power";
+
+      if ($this->stats["luck"]) {
+         $output .= ", `" . $this->stats["luck"] . " luck`";
+      }
+      if ($this->stats["defense"]) {
+         $output .= ", `" . $this->stats["defense"] . " defense`";
       }
 
-      return "";
+      return $output;
    }
 }
