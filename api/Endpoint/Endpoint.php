@@ -33,7 +33,7 @@ class Endpoint
       header('Content-Type: text/html');
 
       if ($status === 404) {
-         echo 'Not found.';
+         echo file_get_contents("serve/404.html");
       }
    }
 

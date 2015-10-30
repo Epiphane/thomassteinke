@@ -14,37 +14,13 @@ use Fight\Controller\FightPrefsController;
 
 class FightEndpoint extends Endpoint
 {
-   // Example payload from Slack
-   /*
-   {  
-      "token":"zuE4F5lLtrHkL7DKbpiwFH4m",
-      "team_id":"T0B2LSLP6",
-      "team_domain":"team-pc",
-      "service_id":"12884001970",
-      "channel_id":"C0CS03RK4",
-      "channel_name":"testslack",
-      "timestamp":"1445368606.000013",
-      "user_id":"U0B2QPTNU",
-      "user_name":"thomassteinke",
-      "text":"fight dude",
-      "trigger_word":"fight"
-   }
-   */
-   public function wrapSlack($text) {
-      if ($text === null) return [];
-
-      if (!is_string($text)) {
-         $text = json_encode($text);
-      }
-
-      return [
-         "text" => " " . $text
-      ];
+   public function isEndpoint($path) {
+      return false;
    }
 
    public function get($path) {
       if (!$_GET["code"]) {
-         echo '<a href="https://slack.com/oauth/authorize?scope=post&client_id=11088904788.13274729057"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>';
+         echo file_get_contents("serve/fight.html");
 
          return false;
       }
@@ -75,11 +51,25 @@ class FightEndpoint extends Endpoint
       }
    }
 
+   // Example params
+   /*
+   Path: "fight"
+   [
+      "text" => "<@USLACKBOT>,
+      "user_id" => "U0B2QPTNU",
+      "user_name" => "thomassteinke",
+      "team_id" => "T0B2LSLP6",
+      "channel_id":"C0CS03RK4"
+   ]
+   */
    public function post($path, $params) {
-      $user = FightController::findUser($_POST["team_id"], $_POST["user_id"]);
-      if ($_POST["user_name"] !== $user->slack_name) {
-         $user->update(["slack_name" => $_POST["user_name"]]);
+      // Fetch and update user data
+      $user = FightController::findUser($params["team_id"], $params["user_id"]);
+      if ($params["user_name"] && $params["user_name"] !== $user->slack_name) {
+         $user->update(["slack_name" => $params["user_name"]]);
       }
+
+      // return ["text" => " " . $path . " -- " . $params["text"]];
 
       $result = FightController::fight($user, $_POST["channel_id"], $_POST["trigger_word"], $_POST["text"]);
 

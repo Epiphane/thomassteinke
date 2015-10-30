@@ -28,6 +28,9 @@ class BaseEndpoint extends Endpoint
       elseif ($path[0] === "fight") {
          $handler = new \Endpoint\FightEndpoint();
       }
+      elseif ($path[0] === "slack") {
+         $handler = new \Endpoint\SlackEndpoint();
+      }
 
       if ($handler) {
          $handler->respond($_SERVER["REQUEST_METHOD"], array_slice($path, 1), $params);
