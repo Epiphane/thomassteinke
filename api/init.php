@@ -1,6 +1,6 @@
 <?
 
-require_once "config.php";
+require_once __DIR__ . "/config.php";
 
 function __autoload($class_name) {
    $parts = explode("\\", $class_name);
