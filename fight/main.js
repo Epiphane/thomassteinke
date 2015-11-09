@@ -7,36 +7,43 @@
       40: 'down'
    };
 
-   $(document).ready(function() {
-      console.log("HI!");
+   var command = $('#command');
+
+   command.on('blur', function() {
+      command.focus();
    });
+   command.focus();
+
+   command.on('input', function() {
+      Input.set(command.val().toUpperCase());
+   });      
 
    $(document).on('keydown', function(e) {
       var keyCode = e.keyCode;
 
-      if (keyCode >= 65 && keyCode < 91) {
-         Input.add(String.fromCharCode(e.keyCode));
-      }
-      else if (specialKeys[keyCode]) {
-         console.log(specialKeys[keyCode]);
-      }
-      else if (keyCode === 32) {
-         Input.add(' ');
-      }
+      if (specialKeys[keyCode]) {
+         var key = specialKeys[keyCode];
 
-      if (keyCode === 8) { // backspace
-         Input.backspace();
-
-         return false;
+         if (Input[key]) {
+            Input[key]();
+         }
       }
    });
 
    var Input = {
       div: $('#input'),
       str: '',
+      password: false,
       set: function(str) {
          this.str = str;
-         this.div.text(this.str);
+
+         var str = this.str;
+         if (this.password) {
+            str = (new Array(str.length + 1)).join('*');
+         }
+
+         this.div.html('$ ' + str + '<span class="blink">_</span>');
+         command.val(this.str);
       },
       add: function(letter) {
          this.set(this.str + letter);
@@ -46,5 +53,46 @@
 
          this.set(this.str.substring(0, this.str.length - 1));
       },
+      enter: function() {
+         this.reset();
+
+         window.Game.act(this.str.toLowerCase()).then(function(result) {
+            Input.insertAttachments(result);
+         });
+
+         this.set('');
+      },
+      reset: function() {
+         var history = this.div.clone();
+
+         var str = this.str;
+         if (this.password) {
+            str = (new Array(str.length + 1)).join('*');
+         }
+
+         history.html('$ ' + str);
+
+         history.removeAttr('id');
+         history.insertBefore(this.div);
+
+         this.password = false;
+      },
+      setPassword: function(isPassword) {
+         this.password = !!isPassword;
+      },
+      insertAttachments: function(attachments) {
+         while (attachments.length) {
+            var attachment = attachments.shift();
+            var element = $('<div class="attachment ' + (attachment.type || 'info') + '">');
+
+            element.text(attachment.text);
+
+            element.insertBefore(this.div);
+         }
+      }
    };
-})();
+
+   window.setPassword = function() {
+      Input.setPassword.apply(Input, arguments);
+   }
+})(window);
