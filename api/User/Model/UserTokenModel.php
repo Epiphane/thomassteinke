@@ -23,6 +23,8 @@ class UserTokenModel extends \Data\Model
       "user_id", "token"
    ];
 
+   public static $pKey = "token";
+
    public $user_id;
    public $token;
    public $expires;

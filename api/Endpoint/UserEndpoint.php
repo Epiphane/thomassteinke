@@ -37,7 +37,8 @@ class UserEndpoint extends CRUDEndpoint
          $user = UserController::getUserByEmail($params["email"]);
 
          if ($user && UserController::verifyPassword($user, $params["password"])) {
-            return UserTokenController::generateToken($user->id);
+            $token = UserTokenController::generateToken($user->id);
+            return $token;
          }
       }
 

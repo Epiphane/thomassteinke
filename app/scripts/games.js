@@ -1,6 +1,25 @@
 angular.module('thomassteinke').factory('games', function($sce) {
   var games = {};
 
+  games['threetris'] = {
+    title: 'Threetris',
+    thumb: 'threetris.png',
+    image: 'threetris@2x.png',
+    quotes: [
+      {
+        quote: 'Wow this is nuts. Works great, but since the board rotates each time, makes it difficult to plan your next move.',
+        author: {
+          name: 'Anonymous'
+        }
+      }
+    ],
+    link: 'http://thomassteinke.com/threetris',
+    color: '#57D0B7',
+    authors: 'Thomas Steinke',
+    desc: 'A three-dimensional twist on the classic arcade game of Tetris',
+    description: 'Threetris takes the common game of Tetris and moves it into the third dimension. Every time, you place a piece, the platform rotates 90 degrees, and you are faced with a new board. Can you keep up?',
+  };
+
   games['quicksilver'] = {
     title: 'Quicksilver',
     thumb: 'quicksilver.png',
@@ -74,7 +93,7 @@ angular.module('thomassteinke').factory('games', function($sce) {
       'rgbzero-sc3.png',
       'rgbzero-sc4.png',
     ],
-    link: 'thomassteinke.com/RGBZero/',
+    link: 'http://thomassteinke.com/RGBZero/',
     showcase: [
       {
         link: 'http://thomassteinke.com/RGBZero/',

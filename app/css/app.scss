@@ -3,7 +3,7 @@
 @import "../bower_components/font-awesome/scss/font-awesome.scss";
 
 /** Variables */
-$pages: contact, games, resume;
+$pages: home, contact, games, resume;
 
 /** Document elements */
 html {
@@ -48,10 +48,6 @@ hr {
 
 .no-gutter {
   padding: 0;
-}
-
-.no-gutter-right {
-  padding-right: 0;
 }
 
 .progress-bar {
@@ -181,10 +177,8 @@ hr {
     }
   }
 
-  li > a {
-    &:hover, &:focus {
-      background-color: transparent;
-    }
+  li > a:hover {
+    background-color: transparent;
   }
 
   .navbar-nav {
@@ -287,6 +281,11 @@ hr {
   @each $page in $pages {
     &.#{$page} {
       background: url('/images/banner/#{$page}.png') no-repeat center;
+
+      @if $page == home {
+        background-position: center 0;
+        height: 100vh;
+      }
     }
   }
 
@@ -296,13 +295,12 @@ hr {
     @each $page in $pages {
       &.#{$page} {
         background: url('/images/banner/#{$page}@2x.png') no-repeat center;
+
+        @if $page == home {
+          background-position: center 0;
+        }
       }
     }
-  }
-
-  &.home {
-    background: #000;
-    height: 100vh
   }
 }
 
@@ -466,20 +464,20 @@ hr {
   .languages {
     text-align: center;
 
-    > div:nth-child(3n) {
+    div:nth-child(3n) {
       padding-right: 0;
     }
 
-    > div:nth-child(3n + 1) {
+    div:nth-child(3n + 1) {
       padding-left: 0;
     }
 
-    > div:nth-child(3n + 2) {
+    div:nth-child(3n + 2) {
       padding: 0;
     }
 
     @media all and (max-width: 767px) {
-      > div {
+      div {
         padding: 0;
       }
     }
@@ -510,16 +508,10 @@ hr {
 
   .item {
     z-index: 1;
-    background: rgba(91, 192, 222, 0.44);
+    background: #eee;
     border-radius: 3px;
     margin-bottom: 15px;
     padding: 15px;
-
-    &.not-active {
-      background: none;
-      border: 2px solid rgba(91, 192, 222, 0.44);
-      padding: 13px;
-    }
 
     &.short {
       height: 100px;

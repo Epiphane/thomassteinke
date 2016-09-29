@@ -1,6 +1,16 @@
 angular.module('thomassteinke').controller('ResumeCtrl', function($scope, resumeUpdater) {
 	$scope.experience = [
 		{
+			title: 'Riot Games',
+			position: 'Software Engineer Intern',
+			time: 'Jun 2016 - Sep 2016',
+			image: 'riot.png',
+			details: [
+				'Worked on the patcher for League of Legends, including writing tests and features for the new and old versions of the patcher.',
+				'Helped create a set of metric watchers to monitor and ensure uptime and performance'
+			]
+		},
+		{
 			title: 'Weebly',
 			position: 'Software Developer Intern',
 			time: 'Jun 2015 - Sep 2015',
