@@ -1,0 +1,16 @@
+'use strict';
+
+var express = require('express');
+var controller = require('./resume.controller');
+
+var router = express.Router();
+
+router.get('/', controller.index);
+// router.get('/projects', controller.projects);
+// router.get('/languages', controller.languages);
+// router.post('/', controller.create);
+// router.put('/:id', controller.update);
+// router.patch('/:id', controller.update);
+// router.delete('/:id', controller.destroy);
+
+module.exports = router;

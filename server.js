@@ -4,6 +4,7 @@ var browserify = require('browserify-middleware');
 var less = require('less-middleware');
 var nunjucks = require('nunjucks');
 var config = require('./client/config');
+var InitializeAPI = require('./server/app');
 
 // initialise express
 var app = express();
@@ -17,6 +18,9 @@ nunjucks.configure('server/templates/views', {
 app.use(less('public'));
 // public assets are served before any dynamic requests
 app.use(express.static('public'));
+
+// Include the rest of the server stuff (API, etc)
+InitializeAPI(app);
 
 // common packages are precompiled on server start and cached
 app.get('/js/' + config.common.bundle, browserify(config.common.packages, {
@@ -45,6 +49,6 @@ app.get('*', function(req, res) {
 });
 
 // start the server
-var server = app.listen(process.env.PORT || 3000, function() {
+var server = app.listen(process.env.PORT || 5000, function() {
 	console.log('\nServer ready on port %d\n', server.address().port);
 });
