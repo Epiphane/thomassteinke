@@ -1,5 +1,7 @@
 'use strict';
 
+console.log(process.env.DATABASE_URL);
+
 // Production specific configuration
 // =================================
 module.exports = {
@@ -25,9 +27,9 @@ module.exports = {
   sequelize: {
     uri: process.env.DATABASE_URL,
     options: {
-      dialog: 'postgres',
-      port: 5432,
-      logging: false
+      dialog: 'mysql',
+      logging: false,
+      port: 3306
     }
   },
 
