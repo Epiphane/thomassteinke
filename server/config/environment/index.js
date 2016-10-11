@@ -10,6 +10,12 @@ function requiredProcessEnv(name) {
   return process.env[name];
 }
 
+var local = require('../local.env');
+
+for (var key in local) {
+  process.env[key] = local[key];
+}
+
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // All configurations will extend these options
@@ -51,4 +57,5 @@ var all = {
 // ==============================================
 module.exports = _.merge(
   all,
+  local,
   require('./' + process.env.NODE_ENV + '.js') || {});
