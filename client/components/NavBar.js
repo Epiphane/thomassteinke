@@ -8,9 +8,8 @@ module.exports = React.createClass({
       var parallaxHeader = document.getElementById('parallax-header');
       var navbar         = document.getElementById('navbar');
 
-      if (parallaxHeader) this.navbarHeight += parallaxHeader.offsetHeight;
+      if (parallaxHeader) this.navbarHeight += parallaxHeader.offsetHeight - navbar.offsetHeight;
       else                this.navbarHeight = 0;
-      if (navbar)         this.navbarHeight -= navbar.offsetHeight;
 
       window.onscroll = this.windowScrolled;
 
@@ -19,7 +18,7 @@ module.exports = React.createClass({
 
    windowScrolled: function() {
       this.setState({
-         scroll: (this.navbarHeight > 0 && window.pageYOffset > this.navbarHeight)
+         scroll: (window.pageYOffset > this.navbarHeight)
       });
    },
 
