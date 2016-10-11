@@ -4,7 +4,7 @@
 // ==================================
 module.exports = {
   sequelize: {
-    uri: 'mysql://root:root@localhost/thomassteinke',
+    uri: process.env.DATABASE_URL,
     options: {
       dialog: 'mysql',
       logging: false,
