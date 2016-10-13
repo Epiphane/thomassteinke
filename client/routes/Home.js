@@ -32,6 +32,16 @@ var NavBar = require('../components/NavBar');
 var HomeCanvas = require('../components/Home-Canvas');
 
 var Home = React.createClass({
+   contextTypes: {
+      router: React.PropTypes.object.isRequired
+   },
+
+   componentWillMount: function() {
+      if (this.props.location.pathname.length > 1) {
+         this.context.router.push('/');
+      }  
+   },
+
 	render: function() {
 		return (
          <div>

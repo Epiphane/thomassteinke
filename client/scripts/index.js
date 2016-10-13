@@ -47,14 +47,14 @@ var routes = {
 
 var routes = (
    <Router.Route name="app" path="/" component={App}>
-      <Router.Route name="home" path="/" component={routes.Home}/>
       <Router.Route name="not-home" component={FooterPage}>
          <Router.Route name="game" path="/games/:gameName" component={routes.Game}/>
          <Router.Route name="games" path="/games" component={routes.Games}/>
          <Router.Route name="resume" path="/resume" component={routes.Resume}/>
          <Router.Route name="contact" path="/contact" component={routes.Contact}/>
       </Router.Route>
-      <Router.IndexRoute component={routes.Home}/>
+      <Router.IndexRoute name="home" component={routes.Home}/>
+      <Router.Route path="*" component={routes.Home}/>
    </Router.Route>
 );
 
