@@ -117,8 +117,7 @@ var Game = React.createClass({
                   <h1 className="h1">{ game.title }</h1>
                   {download}
                   <p className="game-authors">{ game.authors }</p>
-                  <h5 className="game-description">
-                  {game.description}
+                  <h5 className="game-description" dangerouslySetInnerHTML={{__html: game.description}}>
                   </h5>
 
                   {link}
