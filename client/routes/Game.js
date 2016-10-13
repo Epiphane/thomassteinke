@@ -104,7 +104,7 @@ var Game = React.createClass({
 
       var link = null;
       if (game.link) {
-         link = (<a target="_blank" href="{ game.link }" className="btn btn-primary">Game page</a>);
+         link = (<a target="_blank" href={ game.link } className="btn btn-primary">Game page</a>);
       }
 
 		return (
