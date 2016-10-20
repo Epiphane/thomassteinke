@@ -10,10 +10,15 @@ function requiredProcessEnv(name) {
   return process.env[name];
 }
 
-var local = require('../local.env');
+try {
+  var local = require('../local.env');
 
-for (var key in local) {
-  process.env[key] = local[key];
+  for (var key in local) {
+    process.env[key] = local[key];
+  }
+}
+catch (ex) {
+  // Ignore
 }
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -34,7 +39,7 @@ var all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'fullstack-test-secret'
+    session: process.env.SECRET
   },
 
   // List of user roles

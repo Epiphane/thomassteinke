@@ -7,6 +7,7 @@
 @import "../../node_modules/bootstrap/less/bootstrap.less";
 @import "./bootstrap-social.less";
 @import "../../node_modules/font-awesome/less/font-awesome.less";
+@import "./sb-admin.less";
 
 /** Document elements */
 html {
@@ -189,8 +190,6 @@ hr {
   }
 
   .navbar-nav {
-    margin: 0;
-
     li {
       float: left;
     }
@@ -544,4 +543,23 @@ hr {
 
 .btn-social-icon {
   margin-left: 5px;
+}
+
+#auth-button {
+  position: fixed;
+  background: black;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 8px;
+  border-radius: 0 0 0 5px;
+  color: white;
+
+  opacity: 0;
+
+  transition: opacity ease-in 0.5s;
+
+  &:hover {
+    opacity: 1;
+  }
 }

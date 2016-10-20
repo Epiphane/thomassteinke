@@ -4,6 +4,7 @@ var browserify = require('browserify-middleware');
 var less = require('less-middleware');
 var nunjucks = require('nunjucks');
 var config = require('./client/config');
+var bodyParser = require('body-parser');
 var InitializeAPI = require('./server/app');
 
 // initialise express
@@ -18,6 +19,9 @@ nunjucks.configure('server/templates/views', {
 app.use(less('public'));
 // public assets are served before any dynamic requests
 app.use(express.static('public'));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Include the rest of the server stuff (API, etc)
 InitializeAPI(app);

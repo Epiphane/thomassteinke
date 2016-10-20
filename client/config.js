@@ -17,7 +17,8 @@ module.exports = {
 		packages: [
 			'react',
 			'react-addons',
-			'react-router'
+			'react-router',
+         'whatwg-fetch'
 		]
 	}
 };

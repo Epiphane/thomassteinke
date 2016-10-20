@@ -66,12 +66,15 @@ function removeEntity(res) {
 exports.index = function(req, res) {
   Game.findAll({
     include: [{ model: Quote, as: 'quotes' }, { model: Showcase, as: 'showcase' }],
+    order: [
+      ['order', 'DESC']
+    ]
   })
     .then(responseWithResult(res))
     .catch(handleError(res));
 };
 
-// Get a single property
+// Get a single game
 exports.show = function(req, res) {
   Game.find({
     where: {
@@ -84,32 +87,20 @@ exports.show = function(req, res) {
     .catch(handleError(res));
 };
 
-/*
-// Creates a new property in the DB.
+// Creates a new Game in the DB.
 exports.create = function(req, res) {
-  if(!req.body.imageURL) {
-    req.body.imageURL = 'https://s3-us-west-2.amazonaws.com/pr-properties/no-image.png';
-  }
-
-  Property.create(req.body)
+  Game.create(req.body)
     .then(responseWithResult(res, 201))
     .catch(handleError(res));
 };
 
-// Updates an existing property in the DB.
+// Updates an existing Game in the DB.
 exports.update = function(req, res) {
   // Fix x-editable submission
-  if(req.body.pk) {
-    req.body[req.body.name] = req.body.value;
-    delete req.body.name;
-    delete req.body.value;
-    delete req.body.pk;
-  }
-
   if (req.body._id) {
     delete req.body._id;
   }
-  Property.find({
+  Game.find({
     where: {
       _id: req.params.id
     }
@@ -120,7 +111,8 @@ exports.update = function(req, res) {
     .catch(handleError(res));
 };
 
-// Deletes a property from the DB.
+/*
+// Deletes a Game from the DB.
 exports.destroy = function(req, res) {
   Property.find({
     where: {

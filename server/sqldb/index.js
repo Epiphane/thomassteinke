@@ -14,13 +14,13 @@ var db = {
   sequelize: new Sequelize(config.sequelize.uri, config.sequelize.options)
 };
 
-// db.User = db.sequelize.import(path.join(
-//   config.root,
-//   'server',
-//   'api',
-//   'user',
-//   'user.model'
-// ));
+db.User = db.sequelize.import(path.join(
+  config.root,
+  'server',
+  'api',
+  'user',
+  'user.model'
+));
 
 // Insert models below
 function full_path(name) {

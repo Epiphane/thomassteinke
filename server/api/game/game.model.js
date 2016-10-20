@@ -24,5 +24,10 @@ module.exports = function(sequelize, DataTypes) {
     authors: DataTypes.STRING,
     desc: DataTypes.STRING,
     description: DataTypes.TEXT,
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
   });
 };
