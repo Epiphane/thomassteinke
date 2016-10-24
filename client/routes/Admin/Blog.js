@@ -5,11 +5,33 @@ var Admin = require('../../components/Admin');
 var Panel = Admin.Panel;
 var BS = require('../../components/Bootstrap');
 
+var BlogListItem = React.createClass({
+   render: function() {
+      var post = this.props.post;
+
+      return (
+         <Router.Link to={'/admin/blog/' + post._id} className="list-group-item">
+            <i className="fa fa-edit"></i>
+            &nbsp;
+            {post.title}
+         </Router.Link>
+      );
+   }
+});
+
 var Blog = React.createClass({
    getInitialState: function() {
       return {
          posts: []
       };
+   },
+
+   componentDidMount: function() {
+      var self = this;
+      Auth.fetch('/api/blog')
+         .then(function(res) {
+            self.setState({ posts: res.json });
+         });
    },
 
    render: function() {
@@ -37,7 +59,7 @@ var Blog = React.createClass({
                      {
                         this.state.posts.map(function(post, index) {
                            return (
-                              <div key={index}>{post.title}</div>
+                              <BlogListItem key={index} post={post}></BlogListItem>
                            );
                         })
                      }

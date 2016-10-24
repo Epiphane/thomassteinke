@@ -42,7 +42,7 @@ var FooterPage = React.createClass({
                      <a href="https://www.linkedin.com/in/thomsteinke" target="_blank" className="btn btn-social-icon btn-linkedin"><i className="fa fa-linkedin"></i></a>
                      <a href="https://github.com/Epiphane" target="_blank" className="btn btn-social-icon btn-github"><i className="fa fa-github"></i></a>
                   </span>
-                  <div className="hidden-xs">Designed, coded and spel-chequed by Thomas Steinke</div>
+                  <div className="hidden-xs">Designed, coded, and spel-chequed by Thomas Steinke</div>
                   <div className="visible-xs">Thomas Steinke</div>
                </div>
             </div>

@@ -34,14 +34,17 @@ db.Game = db.sequelize.import(full_path('game'));
 db.Game.Quote = db.sequelize.import(full_path('game.quote'));
 db.Game.Showcase = db.sequelize.import(full_path('game.showcase'));
 
+db.Game.hasMany(db.Game.Quote, { as: 'quotes' });
+db.Game.hasMany(db.Game.Showcase, { as: 'showcase' });
+
 db.Resume = {
   Experience: db.sequelize.import(full_path('resume.experience')),
   Project: db.sequelize.import(full_path('resume.project')),
   Language: db.sequelize.import(full_path('resume.language')),
 }
 
-db.Game.hasMany(db.Game.Quote, { as: 'quotes' });
-db.Game.hasMany(db.Game.Showcase, { as: 'showcase' });
+db.BlogPost = db.sequelize.import(full_path('blog'));
+
 // db.Property.belongsTo(db.User);
 
 module.exports = db;

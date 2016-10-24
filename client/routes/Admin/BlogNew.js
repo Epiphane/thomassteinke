@@ -5,11 +5,36 @@ var Admin = require('../../components/Admin');
 var Panel = Admin.Panel;
 var BS = require('../../components/Bootstrap');
 
-var Blog = React.createClass({
+var BlogNew = React.createClass({
+   contextTypes: {
+      router: React.PropTypes.object.isRequired
+   },
+
    getInitialState: function() {
       return {
-         posts: []
+         title: '',
+         html: '',
+         tags: ''
       };
+   },
+
+   submit: function(e) {
+      var self = this;
+      e.preventDefault();
+
+      Auth.post('/api/blog/', {
+         data: this.state
+      }).then(function() {
+         self.context.router.push('/admin/blog');
+      });
+   },
+
+   title: function(e) {
+      this.setState({ title: e.target.value });
+   },
+
+   html: function(e) {
+      this.setState({ html: e.target.value });
    },
 
    render: function() {
@@ -20,23 +45,44 @@ var Blog = React.createClass({
             <div className="row">
                <div className="col-lg-12">
                   <h1 className="page-header">
-                     Blog <small>Overview</small>
+                     New Blog Post
                   </h1>
                </div>
             </div>
 
             <Admin.FullPanel>
-               <Admin.PanelTitle icon="edit" title="Posts" />
+               <Admin.PanelTitle icon="edit" title="Post Info" />
                <Admin.PanelBody>
-                  <div className="list-group">
-                     {
-                        this.state.posts.map(function(post, index) {
-                           return (
-                              <div key={index}>{post.title}</div>
-                           );
-                        })
-                     }
-                  </div>
+                  <form onSubmit={this.submit}>
+                     <div className="form-group row">
+                        <div className="col-xs-12">
+                           <input type="text" 
+                              className="form-control input-sm" 
+                              placeholder="Title" 
+                              onChange={this.title}
+                              value={this.state.title} />
+                        </div>
+                     </div>
+
+                     <div className="form-group row">
+                        <div className="col-xs-6">
+                           <textarea type="text" 
+                              className="form-control input-sm" 
+                              placeholder="HTML Body" 
+                              onChange={this.html}
+                              value={this.state.html} />
+                        </div>
+
+                        <div className="col-xs-6" dangerouslySetInnerHTML={{__html: this.state.html}}>
+                        </div>
+                     </div>
+
+                     <div className="form-group row">
+                        <div className="col-xs-12">
+                           <input type="submit" className="btn btn-primary btn-sm" value="Save" />
+                        </div>
+                     </div>
+                  </form>
                </Admin.PanelBody>
             </Admin.FullPanel>
          </div>
@@ -44,4 +90,4 @@ var Blog = React.createClass({
    }
 });
 
-module.exports = Blog;
+module.exports = BlogNew;

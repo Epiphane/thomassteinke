@@ -44,6 +44,7 @@ module.exports = function(app) {
 
    app.use('/api/user', require('./api/user'));
    app.use('/api/game', require('./api/game'));
+   app.use('/api/blog', require('./api/blog'));
    app.use('/api/resume', require('./api/resume'));
    app.use('/auth', require('./auth'));
 };
