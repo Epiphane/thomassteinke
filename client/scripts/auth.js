@@ -37,6 +37,7 @@ Auth.fetch = function(url, opts) {
 }
 
 Auth.login = function(email, password) {
+   console.trace();
    return Auth.post('/auth/local', {
       data: {
          email: email,
@@ -44,6 +45,7 @@ Auth.login = function(email, password) {
       }
    })
       .then(function(res, status) {
+         console.log('awa');
          localStorage.token = res.token;
 
          return true;
@@ -76,7 +78,12 @@ Auth.onChange = function(loggedIn) {
    }
 };
 
-Auth.login('exyphnos@gmail.com', 'thomas');
+Auth.checkLogin = function() {
+   console.log(Auth.isLoggedIn(), window.location.href.indexOf('admin'));
+   if (!Auth.isLoggedIn() && window.location.href.indexOf('admin') >= 0) {
+      Router.browserHistory.replace('login');
+   }
+};
 
 if (localStorage.token) {
    Auth.get('/api/user/me')
