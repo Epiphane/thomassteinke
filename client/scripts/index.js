@@ -6,10 +6,6 @@ var React = require('react'),
     AuthButton = require('../components/AuthButton');
 
 var App = React.createClass({
-   componentDidMount: function() {
-      document.body.style.backgroundColor = '#eeeeee';
-   },
-
    render: function() {
       return this.props.children;
    }
@@ -73,6 +69,7 @@ var routes = {
    Home: require('../routes/Home'),
    Games: require('../routes/Games'),
    Game: require('../routes/Game'),
+   Blog: require('../routes/Blog'),
    Contact: require('../routes/Contact'),
    Resume: require('../routes/Resume'),
    Login: require('../routes/Login'),
@@ -98,6 +95,7 @@ var routes = (
 
       <Router.Route name="non-admin" component={NonAdmin}>
          <Router.Route name="login" path="/login" component={routes.Login} onEnter={requireNoAuth}/>
+         <Router.Route name="blog" path="/blog" component={routes.Blog}/>
          <Router.Route name="not-home" component={FooterPage}>
             <Router.Route name="game" path="/games/:gameName" component={routes.Game}/>
             <Router.Route name="games" path="/games" component={routes.Games}/>

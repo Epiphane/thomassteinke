@@ -39,6 +39,7 @@ module.exports = React.createClass({
                   <li><Router.Link to="/games">Games</Router.Link></li>
                   <li><Router.Link to="/resume">Resume</Router.Link></li>
                   <li><Router.Link to="/contact">About Me</Router.Link></li>
+                  <li><Router.Link to="/blog">Blog</Router.Link></li>
                </ul>
             </div>
          </div>

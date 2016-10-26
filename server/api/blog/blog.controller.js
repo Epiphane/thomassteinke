@@ -72,6 +72,22 @@ exports.index = function(req, res) {
     .catch(handleError(res));
 };
 
+// Get list of games
+exports.page = function(req, res) {
+  var limit = req.query.limit || 2;
+
+  BlogPost.findAll({
+    order: [
+      ['_id', 'DESC']
+    ],
+    offset: (req.params.page - 1) * limit,
+    limit: limit,
+    attributes: ['_id', 'title', 'createdAt', 'tags', 'html']
+  })
+    .then(responseWithResult(res))
+    .catch(handleError(res));
+};
+
 // Get a single game
 exports.show = function(req, res) {
   BlogPost.find({

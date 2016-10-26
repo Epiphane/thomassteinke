@@ -332,6 +332,42 @@ hr {
       }
     }
   }
+
+  &.blog {
+    background: white;
+    box-shadow: #000 1px 1px 5px;
+    max-width: 768px;
+
+    h1.large {
+      font-size: 72px;
+    }
+
+    @media all and (min-width: 767px) {
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      right: 0;
+      top: 100px;
+    }
+    @media all and (max-width: 767px) {
+      margin-top: 16px;
+    }
+
+    .blog-post {
+      hr {
+        margin: 40px 0;
+
+        &.light {
+          margin: 5px 0;
+          border-top: 1px solid #dddddd;
+        }
+      }
+    }
+  
+    .blog-timestamp {
+      float: right;
+    }
+  }
 }
 
 /** Home title */
