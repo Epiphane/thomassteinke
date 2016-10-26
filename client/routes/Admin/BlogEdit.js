@@ -52,6 +52,53 @@ var BlogEditTitle = React.createClass({
    }
 });
 
+var BlogEditTags = React.createClass({
+   getInitialState: function() {
+      return {
+         tags: this.props.tags || ''
+      };
+   },
+
+   submit: function(e) {
+      e.preventDefault();
+
+      this.props.submit({ tags: this.state.tags });
+   },
+
+   tags: function(e) {
+      this.setState({ tags: e.target.value });
+   },
+
+   componentWillReceiveProps: function(nextProps) {
+      this.setState({ tags: nextProps.tags });
+   },
+
+   render: function() {
+      return (
+         <Admin.FullPanel>
+            <Admin.PanelTitle icon="edit" title="Tags" />
+            <Admin.PanelBody>
+               <form onSubmit={this.submit} id={this.props.id}>
+                  <div className="form-group row">
+                     <div className="col-xs-10">
+                        <input type="text" 
+                           className="form-control input-sm" 
+                           placeholder="Tags" 
+                           onChange={this.tags}
+                           value={this.state.tags} />
+                     </div>
+
+                     <div className="col-xs-2">
+                        <input type="submit" className="col-xs-12 btn btn-primary btn-sm" value="Save" />
+                     </div>
+                  </div>
+               </form>
+            </Admin.PanelBody>
+         </Admin.FullPanel>
+      );
+   }
+});
+
 var BlogEditBody = React.createClass({
    getInitialState: function() {
       return {
@@ -138,6 +185,7 @@ var BlogEdit = React.createClass({
             </div>
 
             <BlogEditTitle title={this.state.post.title} submit={this.update} />
+            <BlogEditTags tags={this.state.post.tags} submit={this.update} />
             <BlogEditBody html={this.state.post.html} submit={this.update} />
          </div>
       );

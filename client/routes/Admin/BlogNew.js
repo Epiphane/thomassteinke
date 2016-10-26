@@ -65,6 +65,16 @@ var BlogNew = React.createClass({
                      </div>
 
                      <div className="form-group row">
+                        <div className="col-xs-12">
+                           <input type="text" 
+                              className="form-control input-sm" 
+                              placeholder="Tags" 
+                              onChange={this.tags}
+                              value={this.state.tags} />
+                        </div>
+                     </div>
+
+                     <div className="form-group row">
                         <div className="col-xs-6">
                            <textarea type="text" 
                               className="form-control input-sm" 
