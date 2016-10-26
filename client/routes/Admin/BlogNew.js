@@ -33,6 +33,10 @@ var BlogNew = React.createClass({
       this.setState({ title: e.target.value });
    },
 
+   tags: function(e) {
+      this.setState({ tags: e.target.value });
+   },
+
    html: function(e) {
       this.setState({ html: e.target.value });
    },
