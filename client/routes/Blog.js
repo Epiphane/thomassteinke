@@ -1,5 +1,5 @@
 var React = require('react');
-var Auth = require('../scripts/Auth');
+var Auth = require('../scripts/auth');
 
 var NavBar = require('../components/NavBar');
 
