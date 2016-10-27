@@ -124,10 +124,9 @@ exports.update = function(req, res) {
     .catch(handleError(res));
 };
 
-/*
 // Deletes a Game from the DB.
 exports.destroy = function(req, res) {
-  Property.find({
+  BlogPost.find({
     where: {
       _id: req.params.id
     }
@@ -135,4 +134,4 @@ exports.destroy = function(req, res) {
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
-};*/
+};

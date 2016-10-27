@@ -152,8 +152,12 @@ var BlogEditBody = React.createClass({
 });
 
 var BlogEdit = React.createClass({
+   contextTypes: {
+      router: React.PropTypes.object.isRequired
+   },
+
    getInitialState: function() {
-      return { post: { title: '' } };
+      return { post: { title: '' }, deleting: false };
    },
 
    componentDidMount: function() {
@@ -170,6 +174,19 @@ var BlogEdit = React.createClass({
       });
    },
 
+   shouldDelete: function() {
+      this.setState({ deleting: true });
+   },
+
+   delete: function() {
+      var self = this;
+
+      Auth.delete('/api/blog/' + this.props.params.blogId)
+         .then(function() {
+            self.context.router.push('/admin/blog');
+         });
+   },
+
    render: function() {
       var self = this;
 
@@ -177,6 +194,13 @@ var BlogEdit = React.createClass({
          <div className="container-fluid">
             <div className="row">
                <div className="col-lg-12">
+                  {
+                     (!this.state.deleting ? 
+                        (<button className="btn btn-danger pull-right" onClick={this.shouldDelete}>Delete</button>) :
+                        (<button className="btn btn-danger pull-right" onClick={this.delete}>Are you sure?</button>)
+                     )
+                  }
+
                   <h1 className="page-header">
                      {this.state.post.title}&nbsp;
                      <small>Post #{this.props.params.blogId}</small>
