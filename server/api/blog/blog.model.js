@@ -11,5 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     title: DataTypes.STRING,
     html: DataTypes.TEXT,
     tags: DataTypes.STRING
+  }, {
+    paranoid: true
   });
 };
