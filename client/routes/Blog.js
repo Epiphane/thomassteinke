@@ -1,4 +1,5 @@
 var React = require('react');
+var Router = require('react-router');
 var Auth = require('../scripts/auth');
 
 var NavBar = require('../components/NavBar');
@@ -26,9 +27,16 @@ var BlogPost = React.createClass({
 
       return (
          <div className="blog-post">
-            <small className="blog-timestamp">{this.dateFor(post.createdAt)}</small>
+            <small className="blog-timestamp">
+               {this.dateFor(post.createdAt)}
+               {
+                  (Auth.isLoggedIn() ? (<Router.Link to={'/admin/blog/' + post._id}><br />Edit</Router.Link>) : (<small></small>))
+               }
+            </small>
             <h2 className="blog-title">{post.title}</h2>
-            <small className="blog-subtext">{post.tags}</small>
+            <small className="blog-subtext">
+               {post.tags}
+            </small>
             <hr className="light" />
             <div className="blog-body" dangerouslySetInnerHTML={{__html: post.html}}></div>
             <hr />
@@ -48,10 +56,16 @@ var Blog = React.createClass({
       document.body.style.background = 'url(/images/blog_tile.png)';
 
       var self = this;
-      Auth.fetch('/api/blog/page/1')
-         .then(function(res) {
-            self.setState({ posts: res.json });
-         });
+      if (this.props.params.blogId)
+         Auth.fetch('/api/blog/' + this.props.params.blogId)
+            .then(function(res) {
+               self.setState({ posts: [res.json] });
+            });
+      else 
+         Auth.fetch('/api/blog/page/1')
+            .then(function(res) {
+               self.setState({ posts: res.json });
+            });
    },
 
    componentWillUnmount: function() {

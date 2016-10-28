@@ -203,7 +203,7 @@ var BlogEdit = React.createClass({
 
                   <h1 className="page-header">
                      {this.state.post.title}&nbsp;
-                     <small>Post #{this.props.params.blogId}</small>
+                     <small><Router.Link to={'/blog/' + this.state.post._id}>View</Router.Link></small>
                   </h1>
                </div>
             </div>

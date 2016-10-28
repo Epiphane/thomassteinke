@@ -96,6 +96,7 @@ var routes = (
       <Router.Route name="non-admin" component={NonAdmin}>
          <Router.Route name="login" path="/login" component={routes.Login} onEnter={requireNoAuth}/>
          <Router.Route name="blog" path="/blog" component={routes.Blog}/>
+         <Router.Route name="blog" path="/blog/:blogId" component={routes.Blog}/>
          <Router.Route name="not-home" component={FooterPage}>
             <Router.Route name="game" path="/games/:gameName" component={routes.Game}/>
             <Router.Route name="games" path="/games" component={routes.Games}/>
